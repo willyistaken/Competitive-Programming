@@ -1,29 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
-int quantity[105];
-int ans(int n,int m){
-    if(n==1){
-        return 1;
-    }
-    if(n>m){
-        return 0;
-    }
-    if(n==0||m==0){
-        return 0;
-    }
-    int k=0;
-    for(int j=1;j<=quantity[n];j++){
-        k+=ans(n-1,m-j);
-        k%=1000007;
-    }
-    return k;
-}
 int main(){
     int n,m;cin>>n>>m;
     //cout<<n<<" "<<m<<endl;
-
+    int quantity[105];
     for(int i=0;i<n;i++){
         cin>>quantity[i+1];
     }
-    cout<<ans(n,m)<<endl;
+    int dp[n+5][m+5]={{0}};
+    for(int i=1;i<=m;i++){
+        dp[1][i]=1;
+    }
+    for(int j=2;j<=n;j++){
+        for(int g=m;g>=0;g--){      
+            for(int k=1;k<=quantity[j];k++){
+            if(g-k>=0){
+                dp[j][g]+=(dp[j-1][g-k]);
+            dp[j][m]=dp[j][m]%1000007;
+            }
+        }
+        }
+  
+    }
+    cout<<dp[n][m]<<endl;
 }
