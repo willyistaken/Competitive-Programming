@@ -7,6 +7,7 @@ int main(){
 	long long n,m;cin>>n>>m;
 	long long k;cin>>k;
 	long long arr[k];
+	int arrc[k]={0};
 	for(int i=0;i<k;i++){
 		long long a,b;cin>>a>>b;
 		arr[i]=(a-1)*m;
@@ -19,6 +20,7 @@ int main(){
 	sort(arr,arr+k);
 	long long back=0;
 	int conti=1;
+	arrc[0]=1;
 	for(int j=1;j<=k-1;j++){
 		if(arr[j]==arr[j-1]+1){
 			conti+=1;
@@ -29,11 +31,11 @@ int main(){
 			cout<<-1<<endl;
 			return 0;
 		}
+		arrc[j]=conti;
 	}
 	for(int j=0;j<k;j++){
 		if((arr[j]+back)%6==0){
-			back++;
-			j-=1;
+			back+=arrc[j];
 		}
 	}
     if((n*m+back)%6!=0){
