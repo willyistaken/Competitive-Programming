@@ -1,25 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
-int quantity[105];
-int ans(int n,int m){
-    if(n==m){
-        return 1;
-    }
-    if(n>m){
-        return 0;
-    }
-    int k=0;
-    for(int j=1;j<=quantity[n];j++){
-        k+=ans(n-1,m-j);
-    }
-    return k;
-}
+
 int main(){
-    int n,m;cin>>n>>m;
-    cout<<n<<" "<<m;
-    return 0;
-    for(int i=0;i<n;i++){
-        cin>>quantity[i+1];
+    int t;cin>>t;
+    while(t--){
+        int n;cin>>n;
+        int max=0;
+        int min=0;
+        int sum=0;
+        for(int i=0;i<n;i++){
+            int m;cin>>m;
+            sum+=m;
+            if(sum>max){
+                max=sum;
+            }
+            if(sum<min){
+                min=sum;
+            }
+        }
+        cout<<max-min<<endl;
     }
-    //cout<<ans(n,m)<<endl;
 }
