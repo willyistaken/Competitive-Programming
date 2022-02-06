@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <iostream>
 
 using namespace std;
 long long f[81]={0};
@@ -16,4 +16,4 @@ int main(){
     while(cin>>m && m){
         cout<<ans(m)<<endl;
     }
-}
+} 
