@@ -3,16 +3,14 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
-                "C:/msys64/mingw64/include/c++/10.3.0/x86_64-w64-mingw32",
-                "C:/msys64/mingw64/include/c++/10.3.0"
+                "${workspaceFolder}/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:/msys64/mingw64/bin/g++.exe",
+            "compilerPath": "C:/MinGW/bin/gcc.exe",
             "cStandard": "gnu11",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "windows-gcc-x86"
