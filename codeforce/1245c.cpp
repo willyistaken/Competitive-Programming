@@ -53,4 +53,4 @@ int main(){
     
 }
 
-//o(log(n))
+//o(log(n)) log(n) of recurtion algorithm

@@ -44,11 +44,6 @@ int main(){
         if(dp[n][i]<mn&&dp[n][i]>0){
             mn=dp[n][i];
         }
-    }
-    if(mn==503267125){
-        cout<<491387035<<endl;
-    }else{
-       cout<<mn<<endl; 
-    }
+    }1
     
 }
