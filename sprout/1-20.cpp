@@ -3,6 +3,8 @@ using namespace std;
 
 
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
     int t;cin>>t;
     for(int mnm=1;mnm<=t;mnm++){
         cout<<"Line #"<<mnm<<endl;
@@ -24,10 +26,12 @@ int main(){
     for(int p=0;p<m;p++){
         string c;cin>>c;//cout<<total<<","<<deleted<<"|\n";
         if(c=="DEQUEUE"){
-            cout<<line[0].front()<<endl;
-            line[0].pop();
-            if(line[0].empty()){
-                line.erase(line.begin());
+            int gtem;
+            cout<<line[deleted].front()<<endl;
+            gtem=group[line[deleted].front()];
+            line[deleted].pop();
+            if(line[deleted].empty()){
+                grouploc[gtem]=0;
                 deleted++;
             }
         }else{
@@ -46,7 +50,7 @@ int main(){
                 //cout<<grouploc[1]<<"|"<<grouploc[2]<<"|"<<total<<endl;
                 total++;
             }else{
-                line[grouploc[group[num]]-1-deleted].push(num);
+                line[grouploc[group[num]]-1].push(num);
             } 
             }
            

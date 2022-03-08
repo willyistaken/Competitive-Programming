@@ -58,6 +58,7 @@ int main(){
     if(shiftd==0){
         ans[0]+=1;
     }else{
+        cout<<"hello"
         ans[shiftd-1]+=1;
     }
 }
