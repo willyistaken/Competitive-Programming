@@ -42,7 +42,7 @@ int main(){
     long long ans=0;
     //cout<<"\n";
     for(int i=0;i<n;i++){
-        long long area=arr[i]*(right[i]-left[i]+1);
+        long long area=(long long)arr[i]*(right[i]-left[i]+1);
         ans=max(ans,area);
         //cout<<left[i]<<","<<right[i]<<" ";
     }
