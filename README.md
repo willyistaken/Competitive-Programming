@@ -1,2 +1,2 @@
-# Compatitive-Programing
+# Competitive-Programing
 cool!
