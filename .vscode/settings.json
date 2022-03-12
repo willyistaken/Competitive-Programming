@@ -7,7 +7,9 @@
         "vector": "cpp",
         "string_view": "cpp",
         "ranges": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "ratio": "cpp",
+        "chrono": "cpp"
     },
     "files.maxMemoryForLargeFilesMB": 65536
 }
