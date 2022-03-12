@@ -1,5 +1,0 @@
-4 15
-( 1 ) and ( 2 ) and ( 3 ) and ( 4 )
-
-
-not ( not ( not ( not ( not ( not ( ( 1 ) ) ) or ( not ( ( 2 ) ) ) ) ) or ( not ( ( 3 ) ) ) ) ) or ( not ( ( 4 ) ) )
