@@ -5,7 +5,7 @@ struct node {
     int rchild = -1;
     int lchild = -1;
 };
-vector tree;
+vector<node> tree;
 void add(int n, int from) {
     node newnode;
     newnode.num = n;
