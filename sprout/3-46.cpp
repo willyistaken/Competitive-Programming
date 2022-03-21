@@ -64,21 +64,20 @@ int main() {
         int maxcount = 0;
         short timenow = 0;
         while (!master.empty()) {
-            while((short) master.front().t == timenow){
+            while(!master.empty() && (short) master.front().t == timenow){
                 if ((colormap[master.front().x][master.front().y] == target)) --count_target;
              colormap[master.front().x][master.front().y] |= master.front().c;
             if (colormap[master.front().x][master.front().y]==target) ++count_target;
             for(int i=0;i<=7;i++){
              if(inbound((short) master.front().x+dx[i],(short)master.front().y+dy[i],n)){
             if((colormap[(short) master.front().x+dx[i]][master.front().y+dy[i]] | master.front().c) !=colormap[(short) master.front().x+dx[i]][(short) master.front().y+dy[i]]){
-                 master.push(color((short) (master.front().x)+(dx[i]),(short) (master.front().y)+(dy[i]),master.front().c,master.front().t));
+                 master.push(color((short) (master.front().x)+(dx[i]),(master.front().y)+(dy[i]),master.front().c,master.front().t+2));
                          }
             
             }
-     master.pop();
             
             }       
-                
+            master.pop();    
            
             }
             maxcount=max(maxcount,count_target);
