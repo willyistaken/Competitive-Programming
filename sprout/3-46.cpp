@@ -10,25 +10,6 @@ struct color {
 };
 bitset<3> target;
 int count_target = 0;
-
-/* uint16_t mix(uint16_t& addto, uint16_t& beadd) {
-    if (beadd == target) {
-        --count_target;
-    }
-    if (beadd == -1) {
-        if (addto == target) {
-            ++count_target;
-        }
-        return addto;
-    } else {
-        if (mixarr[addto][beadd] == target) {
-            ++count_target;
-        }
-        return mixarr[addto][beadd];
-    }
-} */
-
-
 bitset<3> colortobit(char& c) {
     switch (c) {
         case 'R':
@@ -75,53 +56,10 @@ int main() {
         uint16_t timenow = 0;
         while (maxcount <= count_target) {
             while (master.front().t == timenow) {
-                if ((colormap[master.front().x][master.front().y] == target))
-                    --count_target;
-                colormap[master.front().x][master.front().y] |=
-                    master.front().c;
-                if (colormap[master.front().x][master.front().y]==target)
-                    ++count_target;
-                if (master.front().x + 1 < n && !colormap[master.front().x+1][master.front().y].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x + 1, master.front().y,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().x - 1 >= 0 && !colormap[master.front().x-1][master.front().y].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x - 1, master.front().y,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().y + 1 < n && !colormap[master.front().x][master.front().y+1].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x, master.front().y + 1,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().y - 1 >= 0 && !colormap[master.front().x][master.front().y-1].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x, master.front().y - 1,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().x + 1 < n && master.front().y + 1 < n && !colormap[master.front().x+1][master.front().y+1].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x + 1, master.front().y + 1,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().x - 1 >= 0 && master.front().y + 1 < n && !colormap[master.front().x-1][master.front().y+1].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x - 1, master.front().y + 1,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().x + 1 < n && master.front().y - 1 >= 0 && !colormap[master.front().x+1][master.front().y-1].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x + 1, master.front().y - 1,
-                              master.front().c,
-                              master.front().t + 1));
-                if (master.front().x - 1 >= 0 && master.front().y - 1 >= 0 && !colormap[master.front().x-1][master.front().y-1].test(master.front().c._Find_first()))
-                    master.push(
-                        color(master.front().x - 1, master.front().y - 1,
-                              master.front().c,
-                              master.front().t + 1));
-
+                if ((colormap[master.front().x][master.front().y] == target)) --count_target;
+                colormap[master.front().x][master.front().y] |= master.front().c;
+                if (colormap[master.front().x][master.front().y]==target) ++count_target;
+                
                 master.pop();
             }
             maxcount=max(maxcount,count_target);
