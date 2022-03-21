@@ -1,5 +1,12 @@
-;
-    short t;
+#include <bits/stdc++.h>
+using namespace std;
+struct color {
+    color(uint16_t x1, uint16_t y1, bitset<3> c1, uint16_t t1)
+        : x(x1), y(y1), c(c1), t(t1) {}
+    uint16_t x;
+    uint16_t y;
+    bitset<3> c;
+    uint16_t t;
 };
 bitset<3> target;
 int count_target = 0;
