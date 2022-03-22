@@ -1,34 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 struct color {
-    color(uint16_t x1, uint16_t y1, bitset<3> c1, uint16_t t1)
-        : x(x1), y(y1), c(c1), t(t1) {}
-    uint16_t x;
-    uint16_t y;
-    bitset<3> c;
-    uint16_t t;
+    unsigned short x;
+    unsigned short y;
+    char c;
+    unsigned short t;
 };
-bitset<3> target;
+char target;
 int count_target = 0;
-bitset<3> colortobit(char& c) {
+char colortobit(char& c) {
     switch (c) {
         case 'R':
-            return bitset<3>("100");
+            return 4;
         case 'B':
-            return bitset<3>("010");
+            return 2;
         case 'Y':
-            return bitset<3>("001");
+            return 1;
         case 'P':
-            return bitset<3>("110");
+            return 6;
         case 'G':
-            return bitset<3>("011");
+            return 3;
         case 'O':
-            return bitset<3>("101");
+            return 5;
         case 'D':
-            return bitset<3>("111");
+            return 7;
         default:
-            return bitset<3>("000");
+            return 0;
     }
+}
+void printmap(vector<vector<char> > &arr){
+    for(int i=0;i<5;i++){
+        for(int j=0;j<5;j++){
+            cout<<(int) arr[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
 }
 bool inbound(short x,short y,short n){
     if(x<n && 0<=x){
@@ -51,35 +58,39 @@ int main() {
         short n;
         cin >> n;
         queue<color> master;
-        char colortemp;
+        char colortemp; 
+        vector<vector<char>> colormap(n, vector<char>(n,0));
         for (int i = 0; i < 3; i++) {
             cin >> colortemp;
             short xtemp, ytemp;
             cin >> xtemp >> ytemp;
-            master.push(color(xtemp, ytemp, colortobit(colortemp), 0));
+            master.push({xtemp, ytemp,colortobit(colortemp), 0});
+            colormap[xtemp][ytemp] = colortobit(colortemp);
         }
         cin >> colortemp;
         target = colortobit(colortemp);
-        vector<vector<bitset<3>>> colormap(n, vector<bitset<3>>(n));
-        int maxcount = 0;
+       
+        int maxcount =0;
+        count_target=(target==1 || target==2 || target==4);
         short timenow = 0;
         while (!master.empty()) {
             while(!master.empty() && (short) master.front().t == timenow){
-                if ((colormap[master.front().x][master.front().y] == target)) --count_target;
-             colormap[master.front().x][master.front().y] |= master.front().c;
-            if (colormap[master.front().x][master.front().y]==target) ++count_target;
+              
             for(int i=0;i<=7;i++){
              if(inbound((short) master.front().x+dx[i],(short)master.front().y+dy[i],n)){
-            if((colormap[(short) master.front().x+dx[i]][master.front().y+dy[i]] | master.front().c) !=colormap[(short) master.front().x+dx[i]][(short) master.front().y+dy[i]]){
-                 master.push(color((short) (master.front().x)+(dx[i]),(master.front().y)+(dy[i]),master.front().c,master.front().t+2));
+            if((colormap[ master.front().x+dx[i]][master.front().y+dy[i]] | master.front().c ) !=colormap[(short) master.front().x+dx[i]][(short) master.front().y+dy[i]]){
+                if ((colormap[master.front().x+dx[i]][master.front().y+dy[i]] == target)) --count_target;
+                     colormap[master.front().x+dx[i]][master.front().y+dy[i]] |= master.front().c;
+                if (colormap[master.front().x+dx[i]][master.front().y+dy[i]]==target) ++count_target;
+                 master.push({(short) (master.front().x)+(dx[i]),(master.front().y)+(dy[i]),colormap[master.front().x+dx[i]][master.front().y+dy[i]],(unsigned short) master.front().t+1});
                          }
             
             }
-            
-            }       
-            master.pop();    
-           
             }
+           // cout<<master.front().x<<" "<<master.front().y<<" "<<master.front().t<<endl;
+            master.pop();    
+            }
+           // printmap(colormap);
             maxcount=max(maxcount,count_target);
             ++timenow;
             // cout<<"\n";
