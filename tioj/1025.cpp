@@ -1,51 +1,79 @@
 #include <bits/stdc++.h>
 using namespace std;
-int arr[9][9];
-const int dx[9]={1,1,1,0,0,-1,-1,-1,0};
-const int dy[9]={1,0,-1,1,-1,1,0,-1,0};
-const int centralx[9]={1,1,1,4,4,4,7,7,7};
-const int centraly[9]={1,4,7,1,4,7,1,4,7};
-void printsudo(){
-    for(int i=0;i<9;i++){
-        for(int j=0;j<9;j++){
-            cout<<arr[i][j]<<" \n"[j==8];
+vector<vector<int> > arr(9, vector<int>(9, 0));
+int all=0;
+void printsudo() {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            cout << arr[i][j] << " \n"[j == 8];
         }
     }
-} 
-void solve(int n){
-    if(n>80){
-        printsudo();
+    cout << endl;
+}
+bool valid() {
+    for (int i = 0; i < 9; i++) {
+        int possible[10] = {0};
+        for (int j = 0; j < 9; j++) {
+            if (arr[i][j] == 0) continue;
+            if (possible[arr[i][j]] == 0)
+                possible[arr[i][j]] = 1;
+            else
+                return 0;
+        }
     }
-    bool possible[10]={1};
-    possible[0]=0;
-    int x=n/9;
-    int y=n%9;
-    if(arr[x][y]==0){
-        for(int i=0;i<9;i++){
-            possible[arr[x][i]]=0;
+    for (int i = 0; i < 9; i++) {
+        int possible[10] = {0};
+        for (int j = 0; j < 9; j++) {
+            if (arr[j][i] == 0) continue;
+            if (possible[arr[j][i]] == 0)
+                possible[arr[j][i]] = 1;
+            else
+                return 0;
         }
-        for(int i=0;i<9;i++){
-            possible[arr[i][y]]=0;
-        }
-        for(int i=0;i<8;i++){
-                possible[arr[centralx[(x-(x%3))+(y/3)]+dx[i]][centraly[(x-(x%3))+(y/3)]+dy[i]]]=0;
-        }
-        for(int i=1;i<10;i++){
-            if(possible[i]){
-                arr[x][y]=i;
-                solve(n+1);
+    }
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            int possible[10] = {0};
+            for (int k = 0; k < 3; k++) {
+                for (int l = 0; l < 3; l++) {
+                    if (arr[i * 3 + k][j * 3 + l] == 0) continue;
+                    if (possible[arr[i * 3 + k][j * 3 + l]] == 0)
+                        possible[arr[i * 3 + k][j * 3 + l]] = 1;
+                    else
+                        return 0;
+                }
             }
         }
     }
+    return 1;
 }
-int main(){
-    for(int i=0;i<9;i++){
-        for(int j=0;j<9;j++){
-            cin>>arr[i][j];
+void solve(int n) {
+    if (n > 80) {
+        ++all;
+        printsudo();
+    } else {
+        int x = n / 9;
+        int y = n % 9;
+        if (arr[x][y] == 0) {
+            for (int i = 1; i < 10; i++) {
+                arr[x][y] = i;
+                if (valid()) {
+                    solve(n + 1);
+                }
+            }
+            arr[x][y] = 0;
+        } else {
+            solve(n + 1);
         }
     }
-    solve(0);
-
-
-
+}
+int main() {
+    all=0;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            cin >> arr[i][j];
+        }
+    }
+    solve(0); 
+    cout<<"there are a total of "<<all<<" solution(s)."<<endl;
 }
