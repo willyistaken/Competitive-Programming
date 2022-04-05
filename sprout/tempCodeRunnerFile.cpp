@@ -1,50 +1,76 @@
 #include <bits/stdc++.h>
 using namespace std;
-bool canbeat(pair<int,int>* myhorse,int* hishorse,int k,int time,int n){
-    if(time==-1) return 0;
-    int temparr[n];
-    for(int i=0;i<n;i++){
-        temparr[i] = (*(myhorse+i)).first+(((*(myhorse+i)).second)*time);
-    }    
-    sort(temparr,temparr+n);
-    int count=0;
-    for(int i=0;i<n;i++){
-       // if(count>=k) break;
-        if(temparr[i]>*(hishorse+i) ){
-            ++count;
-        }
-    }
-    return (count>=k);
-}
 
 int main(){
     int t;cin>>t;
     while(t--){
-        int n,k;cin>>n>>k;
-    pair<int,int> myhorse[n];
-    int hishorse[n];
-    for(int i=0;i<n;i++){
-        cin>>myhorse[i].first>>myhorse[i].second;
+
+    int arr[7];
+    for(int i=0;i<6;i++){
+        cin>>arr[i+1];
     }
-    for(int i=0;i<n;i++){
-        cin>>hishorse[i];
+    int ans=0;
+    ans+=arr[6];
+    ans+=arr[5];
+    arr[1]-=11*arr[5];
+    if(arr[1]<0) arr[1]=0;
+    for(int i=0;i<arr[4];i++){
+        ans+=1;
+        if(arr[2]!=0){
+           arr[2]-=5;
+        if(arr[2]<0){
+            arr[2]+=5;
+            arr[1]-=4*(5-arr[2]);
+            arr[2]=0;
+        } 
+        }
+        
     }
-    sort(hishorse,hishorse+n,less<int>());
-    int l=-1;int r=1000000000;
-    int mid ;
-    while(r-l>1){
-        mid = l+((r-l)/2);
-        if (canbeat(myhorse,hishorse,k,mid,n)) {
-            r=mid;
-        } else {
-            l=mid;
+    if(arr[1]<0) arr[1]=0;
+
+    ans+=(arr[3]/4);
+    arr[3]=arr[3]%4;
+    
+    if(arr[3]>0){
+        ans+=1;
+        if(arr[3]==1){
+            if(arr[2]>=5){
+                arr[2]-=5;
+            }else{
+                arr[1]-=(5-arr[2])*4;
+                
+            }
+            arr[1]-=7;
+        }
+        if(arr[3]==2){
+            if(arr[2]>=3){
+                arr[2]-=3;
+            }else{
+                arr[1]-=(3-arr[2])*4;
+            }
+            arr[1]-=6;
+        }
+        if(arr[3]==3){
+            if(arr[2]>=1){
+                arr[2]-=1;
+            }else{
+                arr[1]-=(1-arr[2])*4;
+            }
+            arr[1]-=5;
         }
     }
-    if(canbeat(myhorse,hishorse,k,r,n)){
-        cout<<r<<endl;
-    }else{
-        cout<<-1<<endl;
-    }
+    if(arr[1]<0) arr[1]=0;
+    ans+= arr[2]/9;
+    arr[2]=arr[2]%9;
+    if(arr[2]>0){
+      ans+=1;
+    arr[1]-=36-(4*arr[2]);  
     }
     
+     if(arr[1]<0) arr[1]=0;
+    ans+=arr[1]/36;
+    arr[1]=arr[1]%36;
+    if(arr[1]>0) ans+=1;
+    cout<<ans<<endl;
+    }
 }
