@@ -1,59 +1,68 @@
 #include <bits/stdc++.h>
 using namespace std;
+long long dis(int x,int y,int ax,int ay){
+    if(((long long) (x-ax)*(x-ax))+((long long) (y-ay)*(y-ay))==0) return LONG_LONG_MAX;
+    return ((long long) (x-ax)*(x-ax))+((long long) (y-ay)*(y-ay));
+}
+long long solve(vector<pair<int, int> > &pointset,int l,int r){
+    if(r-l<=1){
+        if(pointset[r].second<pointset[l].second){
+            swap(pointset[r],pointset[l]);
+        }
+        return dis(pointset[r].first,pointset[r].second,pointset[l].first,pointset[l].second);
+    }
+    int mid = (l+r)/2;
+    int xmid = (pointset[mid].first+pointset[mid+1].first)/2;
+    long long left = solve(pointset,l,mid);
+    long long right= solve(pointset,mid+1,r);
+    int d = ceil(sqrt(min(left,right)) );
+    queue<pair<int,int> > q;
+    int lhead = l;
+    int rhead = mid+1;
+    for(int i=l;i<=r;i++){
+        if(rhead>r){
+            q.push(pointset[lhead]);
+            lhead++;
+        }else if(lhead>mid){
+            q.push(pointset[rhead]);
+            rhead++;
+        }else{
+        if(pointset[lhead].second<pointset[rhead].second){
+            q.push(pointset[lhead]);
+            lhead++;
+        }else{
+            q.push(pointset[rhead]);
+            rhead++;
+        }
+        }
+    }
+    long long mincd=LONG_LONG_MAX;
+    for(int i=l;i<=r;i++){
+        pointset[i] = q.front();
 
-/* vector<vector<int> > grid;
-int GetVal(int p,int q){
-    return grid[p-1][q-1];
-}
-void Report(int a){
-    cout<<a<<endl;
-} */
-void mysolve(int t,int d,int l,int r){
-    if(d-t==1){
-        int maxv = INT_MIN;
-        for(int i=l;i<=r;i++){
-            maxv = max(maxv,GetVal(t,i));
-        }
-        Report(maxv);  
-        maxv = INT_MIN;
-        for(int i=l;i<=r;i++){
-            maxv = max(maxv,GetVal(d,i));
-        }
-        Report(maxv);
-        
-    }else if(d==t){
-        int maxv = INT_MIN;
-        for(int i=l;i<=r;i++){
-            maxv = max(maxv,GetVal(d,i));
-        }
-        Report(maxv);
-    } else{
-    int mid = (t+d)/2;
-    int maxind=0;int maxv=INT_MIN;
-    for(int i= l;i<=r;i++){
-        int querry = GetVal(mid,i);
-        if(querry>maxv){
-            maxind=i;
-            maxv=querry;
-        } 
+        q.pop();
     }
-    mysolve(t,mid-1,l,maxind-1);
-    Report(maxv);
-    mysolve(mid+1,d,maxind+1,r);
+    for(int i=l;i<=r;i++){
+        if(abs(pointset[i].first-xmid)<=d){
+
+        for(int j=-3;j<=3;j++){
+            if(j && i+j>=l && i+j<=r){
+                mincd = min(mincd,dis(pointset[i].first,pointset[i].second,pointset[i+j].first,pointset[i+j].second));
+            }
+        }
+        }
     }
+    return min(mincd,min(left,right));
+
 }
-void solve(int n,int m){
-    mysolve(1,n,1,m);
-}
-/* int main(){
-    int n,m;cin>>n>>m;
+int main(){
+    int n;cin>>n;
+    vector<pair<int,int> > pointset(n);
     for(int i=0;i<n;i++){
-        vector<int> te;
-        for(int j=0;j<m;j++){
-            int x;cin>>x;
-            te.push_back(x);
-        }
-        grid.push_back(te);
+        int x,y;cin>>x>>y;
+        pointset[i].first = x;
+        pointset[i].second = y;
     }
-    solve(n,m);
-} */
+    sort(pointset.begin(),pointset.end());
+    cout<<solve(pointset,0,n-1)<<endl;
+}
