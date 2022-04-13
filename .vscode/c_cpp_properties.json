@@ -6,12 +6,12 @@
                 "${workspaceFolder}/**",
                 "C:\\MinGW\\lib\\gcc\\mingw32\\9.2.0\\include\\c++\\mingw32"
             ],
-            "defines": [ 
+            "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "C:/MinGW/bin/gcc.exe",
             "cStandard": "gnu11",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "linux-gcc-x64"
