@@ -1,6 +1,6 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
-    "files.associations": {
+    "files.associations": { 
         "array": "cpp",
         "deque": "cpp",
         "list": "cpp",
