@@ -66,7 +66,7 @@ int main(){
         if(health<=0) break;
         i++;
         if(r>=n) continue;
-        pair<int,int> temp=query(1,0,n-1,r,n-1,segtree);
+        pair<int,int> temp=query(1,0,nextPowerOf2(n)-1,r,n-1,segtree);
         
         if((temp.first!=-1)){
             cdamage+=temp.first;

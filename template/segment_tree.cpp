@@ -50,7 +50,7 @@ int main(){
         modify(i,arr[i],segtree);
     }
     for(int i=0;i<5;i++){
-        cout<<query(1,0,n-1,0,i,segtree)<<endl;
+        cout<<query(1,0,nextPowerOf2(n)-1,0,i,segtree)<<endl;
     }
 
 

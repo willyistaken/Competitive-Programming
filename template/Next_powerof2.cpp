@@ -28,3 +28,5 @@ long long nextPowerOf2(long long n)
     n++;
     return n;
 }
+
+ceil
