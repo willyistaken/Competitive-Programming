@@ -2,6 +2,12 @@
 using namespace std;
 
 int main(){
-    int n;cin>>n;
-    
+    int n,m;cin>>n>>m;
+    int s,t;cin>>s>>t;
+
+
+
+
+
+
 }

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n,m,r;
+int n,m,rate;
 
 int nextPowerOf2(int n) 
 {
@@ -14,72 +14,76 @@ int nextPowerOf2(int n)
     return n;
 }
 
-void modify(int ind,int k,pair<int,int>* segtree){
-    int realloc = ind+nextPowerOf2(n);
-    segtree[realloc] = make_pair(k,ind);
-    while(realloc!=1){
-        realloc/=2;
-        segtree[realloc]=max(segtree[realloc*2],segtree[(realloc*2)+1]);
+void modify(int ind,int k,vector<pair<int,int> > &segtree){
+    if(ind<0) return;
+    int realind = ind + nextPowerOf2(n);
+    segtree[realind] = make_pair(k,ind);
+    while(realind!=1){
+        realind>>=1;
+        segtree[realind]  = max(segtree[2*realind],segtree[2*realind+1]);
     }
-
 }
-pair<int,int> query(int ind,int l,int r,int ql,int qr, pair<int,int>* segtree){
-    
-    if(qr<ql || r<l) return make_pair(INT_MIN,-1);
-    if(r<ql||l>qr) return make_pair(INT_MIN,-1);
-    if(l>=ql && r<=qr) return segtree[ind];
-    if(qr==ql) return segtree[r+nextPowerOf2(n)];
-    int mid = (l+r)/2;
-    return max(query(ind*2,l,mid,ql,qr,segtree),query(ind*2+1,mid+1,r,ql,qr,segtree));
+pair<int,int> query(int l,int r, vector<pair<int,int> > &segtree){
+    pair<int,int> res = make_pair(0,-1);
+    l+=nextPowerOf2(n);
+    r+=nextPowerOf2(n);
+    while( l<r) {
+    if (l%2){
+        res = max(res,segtree[l]);
+        l++;   
+    }
+    if ((r%2)){
+        res = max(res,segtree[r-1]);
+        r--;   
+    } 
+    l = l>>1;
+    r = r>>1;
+  }
+  return res;    
+
 }
 
 int main(){
-    cin>>n>>m>>r;
+    cin>>n>>m>>rate;
     vector<pair<int,int> > spells(n);
     for(int i=0;i<n;i++){
         int p,c;cin>>p>>c;
         spells[i]=make_pair(p,c);
     }
     sort(spells.begin(),spells.end());
-    pair<int,int> segtree[2*nextPowerOf2(n)]={make_pair(0,-1)};
+    vector<pair<int,int> > segtree(2*nextPowerOf2(n),make_pair(0,-1));
     for(int i=0;i<n;i++){
-        modify(i,spells[i].second, segtree );
+        modify(i,spells[i].second,segtree);
     }
-    long long i=0;
-    long long health=m;
-    long long cdamage=0;
-    while(!(i>n && cdamage<=r)){
-        health-=cdamage;
-        health+=r;
-        health=min(health,(long long) m);
-        //binary search for h
-        int l=-1;int r=n;
+    long long time=0;
+    long long DamPerSec = 0;
+    long long health = m;
+    pair<int,int> maxinrange = make_pair(0,-1);
+    while(!(time>n && DamPerSec<=(long long) rate && maxinrange.first<=0 )){
+        health-=DamPerSec;
+        health+=rate;
+        health = min(health,(long long)m);
+        if(health<=0) break;
+        //Binary search for r
+        int r=n;int l=-1;
         while(r-l>1){
-            int mid=(r+l)/2;
-            if((double)spells[mid].first>=(double)(health*100.0)/(double)m){
+            int mid = l+((r-l)>>1);
+            if((long long)spells[mid].first*m >= (long long)health*100){
                 r=mid;
             }else{
                 l=mid;
             }
         }
-        // binary search for h ----code-is-trash---code-is-trash---- 
-        if(health<=0) break;
-        i++;
-        if(r>=n) continue;
-        pair<int,int> temp=query(1,0,nextPowerOf2(n)-1,r,n-1,segtree);
-        
-        if((temp.first!=-1)){
-            cdamage+=temp.first;
-            modify(temp.second,-1,segtree);
-        }       
-       
+        // in range [r,n-1] find the spells with the largest damage that hasn't been chosen yet
+        maxinrange = query(r,n,segtree);
+        DamPerSec += maxinrange.first;
+        modify(maxinrange.second,0,segtree);
+        //advance time
+        ++time;
     }
-    if((i>n && cdamage<=r)){
+    if((time>n && DamPerSec<=(long long) rate && maxinrange.first<=0 )){
         cout<<-1<<endl;
-    }else{
-        cout<<i<<endl;
+    } else{
+        cout<<time<<endl;
     }
-
-
-
 }
