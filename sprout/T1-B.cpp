@@ -57,7 +57,6 @@ void myremove(int &tail,int &head){
     node now = store[mid];
     store[now.connect[0]].connect[1]=now.connect[1];
     store[now.connect[1]].connect[0]=now.connect[0];
-    mid = now.conect[reversed];
     size--;
 }
 
@@ -71,11 +70,7 @@ void mod(int &head,int &tail){
     
 }
 void myreverse(){
-    if(size%2==0){
-
-    }
     reversed=!reversed;
-
 }
 void printout(int &head,int &tail){
     if(size==0){
