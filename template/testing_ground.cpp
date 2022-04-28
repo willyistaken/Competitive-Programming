@@ -1,16 +1,23 @@
 #include <bits/stdc++.h>
 using namespace std;
-int fac[100000]={0};
-
-int fact(int n){
-    if(fac[n]) return fac[n];
-    fac[n]= n*(fact(n-1));
-    return fac[n];
-}
+multiset<int> s;
+int n;
 int main(){
-    fac[0]=1;
-    fac[1]=1;
-    for(int i=0;i<50;i++){
-        cout<<i<<" "<<i<<"!x"<<fact(i)-1<<"!="<<fact(i)<<"!\n";
-    }
-} 
+	cin>>n;
+	int maxn=1;
+	int ia,ib;cin>>ia>>ib;
+	int curstuff=1;
+	int cur=ia;
+	for(int i=1;i<n;i++){
+		int a,b;cin>>a>>b;
+		if(a>=cur){
+			curstuff++;
+			maxn=max(maxn,curstuff);
+			cur=a;
+		}else{
+			curstuff=0;
+			cur=a;
+		}
+	}
+	cout<<maxn<<endl;
+}
