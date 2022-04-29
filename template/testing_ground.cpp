@@ -1,23 +1,84 @@
-#include <bits/stdc++.h>
+#include <iostream>
+
 using namespace std;
-multiset<int> s;
-int n;
-int main(){
-	cin>>n;
-	int maxn=1;
-	int ia,ib;cin>>ia>>ib;
-	int curstuff=1;
-	int cur=ia;
-	for(int i=1;i<n;i++){
-		int a,b;cin>>a>>b;
-		if(a>=cur){
-			curstuff++;
-			maxn=max(maxn,curstuff);
-			cur=a;
+
+
+void merge(int *p, int mfront, int mend)
+
+{
+	int mid=(mfront+mend)/2;
+	int temp[mend-mfront+1];
+	int fhead=mfront;
+	int ehead=mid+1;
+	for(int i=0;i<mend-mfront+1;i++){
+		if(fhead>mid){
+			temp[i]=p[ehead];
+			ehead++;
+			continue;
+		}
+		if(ehead>mend){
+			temp[i]=p[fhead];
+			fhead++;
+			continue;
+		}
+		if(p[fhead]>p[ehead]){
+			temp[i]=p[ehead];
+			ehead++;
 		}else{
-			curstuff=0;
-			cur=a;
+			temp[i]=p[fhead];
+			fhead++;
 		}
 	}
-	cout<<maxn<<endl;
+	for(int i=0;i<mend-mfront+1;i++){
+		p[i+mfront] = temp[i];
+	}
+	return;
+}
+
+void MergeSort(int *p, int mfront, int mend)
+
+{
+	if(mfront==mend) return;
+	if(mend-mfront==1){
+		if(p[mfront]>p[mend]){
+			swap(p[mfront],p[mend]);
+			}
+			return ;
+	}
+	int mid=(mfront+mend)/2;
+	MergeSort(p,mfront,mid);
+	MergeSort(p,mid+1,mend);
+	merge(p,mfront,mend);
+}
+int main()
+
+{
+
+	int scores[7] = {9, 7, 31, 4, 1, 3, 2};
+
+	cout << "before sort" << endl;
+
+	for (int i = 0; i < 7; i++)
+
+	{
+
+		cout << scores[i] << " ";
+	}
+
+	cout << endl;
+
+	MergeSort(scores, 0, 6);
+
+	cout << "after sort" << endl;
+
+	for (int i = 0; i < 7; i++)
+
+	{
+
+		cout << scores[i] << " ";
+	}
+
+	cout << endl;
+
+	return 0;
 }
