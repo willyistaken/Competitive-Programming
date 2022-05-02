@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int n,m;
-int dx[8]={0,0,1,1,1,-1-1-1};
+int dx[8]={0,0,1,1,1,-1,-1,-1};
 int dy[8]={1,-1,0,1,-1,0,1,-1};
 bool inbound(int x,int y){
     if(x<n&&x>=0){
@@ -12,10 +12,10 @@ bool inbound(int x,int y){
     return false;
 }
 void dfs(int x,int y,vector<vector<bool>> &arr){
+    arr[x][y]=0;
     for(int i=0;i<8;i++){
         if(inbound(x+dx[i],y+dy[i])){
             if(arr[x+dx[i]][y+dy[i]]){
-                arr[x+dx[i]][y+dy[i]]=0;
                 dfs(x+dx[i],y+dy[i],arr);
             }
         }
@@ -25,7 +25,7 @@ int main(){
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 
     while(cin>>n>>m && n && m){
-        int upper = n*m>>2;
+
     vector<vector<bool> > arr(n,vector<bool>(m,0));
     for(int i=0;i<n;i++){
         string k;cin>>k;
@@ -37,12 +37,9 @@ int main(){
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
             if(arr[i][j]){
-                arr[i][j]=0;
                 ++ans;
                 dfs(i,j,arr);
             }
-            if(ans>upper) break;
-            
         }
     }
     cout<<ans<<"\n";
