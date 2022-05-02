@@ -2,10 +2,9 @@
 using namespace std;
 
 int main(){
-    int t;cin>>t;
-    while(t--){
-        int n;cin>>n;
-    stack<int> stop;
+    int n;cin>>n;int k;cin>>k;
+    if(k!=2) return 0;
+    queue<int> stop;
     queue<int> order;
     for(int i=0;i<n;i++){
         int a;cin>>a;
@@ -14,7 +13,7 @@ int main(){
     int train_now=1;
     while(!order.empty() && train_now<=n+1){
         if(!stop.empty()){
-            if(stop.top()==order.front()){
+            if(stop.front()==order.front()){
                 stop.pop();
                 order.pop();
             }else{
@@ -32,7 +31,6 @@ int main(){
         cout<<"No"<<endl;
     }else{
         cout<<order.front();
-    }
     }
     
 }
