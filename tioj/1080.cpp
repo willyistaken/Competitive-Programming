@@ -74,6 +74,6 @@ int main(){
     ++t;
     /* for(int i=0;i<nextPowerOf2(n);i++){
         cout<<arr[i];
-    } */
+    }*/ 
     }
 }
