@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>//this is a LIS + LCS;
+#include <bits/stdc++.h>//this is a LIS + LCS;
 using namespace std;
 struct store{
     int value;
