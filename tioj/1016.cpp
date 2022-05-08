@@ -6,8 +6,8 @@ using namespace std;
 */
 int main() {
     string k;
-    while (cin >> k) { 
-        int score[2]={0};
+    while (cin >> k) {
+        int score[2] = {0};
         bool f, s, t;
         f = s = t = 0;
         bool rob = 0;
@@ -19,63 +19,62 @@ int main() {
                     if (out >= 3) {
                         f = s = t = 0;
                         rob = !rob;
-                        out=0;
+                        out = 0;
                     }
                     break;
-                case('O'):
+                case ('O'):
                     ++out;
                     if (out >= 3) {
                         f = s = t = 0;
                         rob = !rob;
-                        out=0;
+                        out = 0;
                     }
                     break;
-                case('W'):
-                    if(f){
-                        if(s){
-                            if(t){
-                                score[rob]+=1;
-                            }else{
-                                t=1;
+                case ('W'):
+                    if (f) {
+                        if (s) {
+                            if (t) {
+                                score[rob] += 1;
+                            } else {
+                                t = 1;
                             }
-                        }else{
-                            s=1;
+                        } else {
+                            s = 1;
                         }
-                    }else{
-                        f=1;
+                    } else {
+                        f = 1;
                     }
                     break;
-                case('S'):
-                    score[rob]+=t;
-                    t=s;
-                    s=f;
-                    f=1;
+                case ('S'):
+                    score[rob] += t;
+                    t = s;
+                    s = f;
+                    f = 1;
                     break;
-                case('D'):
-                    score[rob]+=t;
-                    score[rob]+=s;
-                    t=f;
-                    s=1;
-                    f=0;
+                case ('D'):
+                    score[rob] += t;
+                    score[rob] += s;
+                    t = f;
+                    s = 1;
+                    f = 0;
                     break;
-                case('T'):
-                    score[rob]+=t;
-                    score[rob]+=s;
-                    score[rob]+=f;
-                    t=1;
-                    s=0;
-                    f=0;
+                case ('T'):
+                    score[rob] += t;
+                    score[rob] += s;
+                    score[rob] += f;
+                    t = 1;
+                    s = 0;
+                    f = 0;
                     break;
-                case('H'):
-                    score[rob]+=t;
-                    score[rob]+=s;
-                    score[rob]+=f;
-                    score[rob]+=1;
-                    t=s=f=0;
+                case ('H'):
+                    score[rob] += t;
+                    score[rob] += s;
+                    score[rob] += f;
+                    score[rob] += 1;
+                    t = s = f = 0;
                     break;
             }
         }
-        cout<<score[0]<<" "<<score[1]<<endl;
+        cout << score[0] << " " << score[1] << endl;
     }
-   
 }
