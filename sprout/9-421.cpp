@@ -8,32 +8,21 @@ int main(){
     while(t--){
 
     int n,m;cin>>n>>m;
-    vector<int> sog;
-    vector<int> s1;
-    vector<int> s2;
+    multiset<int> s;
     for(int i=0;i<n;i++){
-        s1=sog;
-        s2=sog;
         int a;cin>>a;
-        int ind=-1;
-        if(a>=m) {
-        auto it = upper_bound(s1.begin(),s1.end(),a);
-        ind = it-s1.begin();
-        if(it!=s1.end()) s1[ind] = a;
-        else s1.push_back(a);
-        }
         if(2*a>=m){
-            auto it = upper_bound(s2.begin(),s2.end(),2*a);
-            ind = it-s2.begin();
-            if(it!=s2.end()) s2[ind] = 2*a;
-            else s2.push_back(2*a);
+            s.insert(2*a);
+            auto it = s.upper_bound(2*a);
+            if(it!=s.end()) s.erase(it);
         }
-        if(s1.size()>s2.size()) sog=s1;
-        if(s1.size()<s2.size()) sog=s2;
-        if(s1.size()==s2.size()) sog=min(s1,s2);
+        if(a>=m){
+            s.insert(a);
+            auto it = s.upper_bound(a);
+            if(it!=s.end()) s.erase(it);
+        }
     }
-    cout<<max(s1.size(),s2.size())<<endl;
-
+    cout<<s.size()<<endl;
     }
 
 
