@@ -19,7 +19,9 @@ int main(){
 			sum+=i;
 			sum%=MOD;
         }
+        if(i%100000==0) cout<<i<<endl;
     }
+    cout<<endl<<endl;
 	cout<<c<<endl<<sum<<endl;
 
     return 0;
