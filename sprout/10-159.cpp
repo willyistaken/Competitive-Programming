@@ -7,7 +7,7 @@ string arr[2]={"No\n","Yes\n"};
 int main(){
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
     int t;cin>>t;
-    while(t--){
+    while(t--){ 
     int n,m;
     cin>>n>>m;
     bool dp[n+1][m+1];
