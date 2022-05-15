@@ -19,7 +19,7 @@ matrix I(){
         matrix temp;
         for(int i=0;i<N;i++){
                 temp.a[i][i]=1;
-        }
+         }
         return temp;
     }
 matrix operator*(matrix a,matrix b){
