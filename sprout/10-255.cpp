@@ -9,7 +9,7 @@ int n;
 tuple<ll,ll,ll> coeff(int x1,int y1,int x2,int y2){
     ll bottom = 1LL*x1*x2*(x1-x2); 
     ll top =  (1LL*x2*y1) - (1LL*x1*y2);
-    ll btop = (1LL*y1*(x2*(x1-x2))) - ((1LL*x1*x2*y1)-(1LL*x1*x1*y2));  
+    ll btop = (1LL*y1*(x2*(x1-x2))) - ((1LL*x1*x2*y1)-(1LL*x1*x1*y2));
     return {top,btop,bottom};
 }
 
