@@ -63,7 +63,7 @@ int main(){
         if((path[i][indn]<indn && dp[i][indn]-dp[i-1][path[i][indn]]==1) || path[i][indn]==-1)  ans.push(b[indn]);
         indn=path[i][indn];
     }
-    if(ans.empty()) cout<<endl;//note to myself: this line is the freaking reason it doesn't ac, because it needed endl even if the length of LCDS is 0. :(
+    if(ans.empty()) cout<<endl;//note to self: this line is the freaking reason it doesn't ac, because it needed endl even if the length of LCDS is 0. :(
     while(!ans.empty()){
         cout<<ans.top()<<" \n"[ans.size()==1];
         ans.pop();

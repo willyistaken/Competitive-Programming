@@ -32,7 +32,12 @@ int main(){
             if(s[k]==a[head]){
                 ++head;
             }else{
-                head=max(kmp[head],0); 
+                head=kmp[head];
+                k--;
+                if(head==-1){
+                    k++;
+                    head=0;
+                }
             } 
             if(head==a.size()) {
                 ++ans;
