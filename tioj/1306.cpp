@@ -39,7 +39,7 @@ int main(){
                 if(head==-1){
                     k++;
                     head=0;
-                }
+                } //the above four line is super important
             } 
             if(head==a.size()) {
                 ++ans;
