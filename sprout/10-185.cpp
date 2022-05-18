@@ -13,23 +13,21 @@ int main(){
         sum[i]=sum[i-1]+a;
     } 
 
-    vector<vector<ll> > dp(n+1,vector<ll>(2,(ll)-1e16));
-    dp[0][0]=0;
-    ll ans = (ll)-1e16;
-    for(int m=1;m<=n;m++){
-        if(m>=2) dp[0][(m+1)%2]=(ll)-1e16;
-     for(int i=1;i<=n;i++){
-         
-        ll maxn =(ll)-1e16;
-        for(int j=i-1;j>=max(0,i-k);j--){
-            maxn =  max(maxn,dp[j][(m+1)%2]+((m-1)*(sum[i]-sum[j])));
+    vector<ll> dp(n+1,(ll)-1e16);
+    dp[n]=0;
+    deque<int> mono;
+    mono.push_back(n);
+    for(int i=n-1;i>=1;i--){
+        while(!mono.empty()&& mono.front()>i+k) mono.pop_front();
+        dp[i]=dp[mono.front()]+sum[n]-sum[mono.front()-1];
+        if(i+k>n) dp[i] = max(0LL,dp[i]);
+        while(!mono.empty()){
+            if(dp[mono.back()]-sum[mono.back()-1]>dp[i]-sum[i-1]) break;
+            mono.pop_back();
         }
-            dp[i][m%2]=maxn;
-            if(i==n){
-                ans = max(ans,maxn);
-            }
+        mono.push_back(i);
     }
-}
-printf("%lld\n",ans);
-return 0;
+    printf("%lld\n",dp[1]);
+
+    return 0;
 }
