@@ -39,12 +39,5 @@ int main(){
             white(n);
         }
     }
-
-
-
-
-
-
-
     return 0;
 }
