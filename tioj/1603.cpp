@@ -13,7 +13,7 @@ int np2(int n){
 	n++;
 	return n;
 }
-void modify(int ind,int value,vector<pair<int,int> > &segtree){
+void modify(int ind,ll value,vector<pair<ll,ll> > &segtree){
 	ind+=np2(n);
 	segtree[ind]=make_pair(value,value);
 	while(ind>1){
@@ -25,8 +25,8 @@ void modify(int ind,int value,vector<pair<int,int> > &segtree){
 
 }
 
-pair<int,int> query(int rl,int rr,vector<pair<int,int> > &segtree){
-	int maxn=INT_MIN;int minn=INT_MAX;
+pair<ll,ll> query(int rl,int rr,vector<pair<ll,ll> > &segtree){
+	ll maxn=LONG_LONG_MIN;ll minn=LONG_LONG_MAX;
 	rl+=np2(n);rr+=np2(n);
 	int l=rl;int r=rr;
 	if(r-l==1) return segtree[l];
@@ -53,7 +53,7 @@ pair<int,int> query(int rl,int rr,vector<pair<int,int> > &segtree){
 int main(){
 	cin>>n;
 	int q;cin>>q;
-	vector<pair<int,int> > segtree(2*np2(n),make_pair(INT_MIN,INT_MAX));
+	vector<pair<ll,ll> > segtree(2*np2(n),make_pair(LONG_LONG_MIN,LONG_LONG_MAX));
 	for(int i=0;i<n;i++){
 		int temp;cin>>temp;
 		modify(i,temp,segtree);
@@ -63,7 +63,7 @@ int main(){
 		if(n==0 || r==l){
 			cout<<0<<endl;	
 		}else{
-		pair<int,int> temp=query(l-1,r,segtree);
+		pair<ll,ll> temp=query(l-1,r,segtree);
 		cout<<temp.first-temp.second<<endl;
 		}
 

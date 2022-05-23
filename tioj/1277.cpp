@@ -15,7 +15,7 @@ int main(){
     }
      ll maxn = INT_MIN;
     for(int i=0;i<=n;i++){
-        for(int j=i;j<=n;j++){
+        for(int j=i+1;j<=n;j++){
             ll dp=INT_MIN;
            
             for(int k=0;k<n;k++){
@@ -25,7 +25,7 @@ int main(){
         }
     }
 
-    cout<<maxn<<endl;
+    cout<<max(maxn,0LL)<<endl;
 
 
 
