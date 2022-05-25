@@ -34,8 +34,8 @@ int main(){
         a[i]=2LL*i;
         b[i]=dp[i]+sum[i]-(1LL*i*i);
         while(mono.size()>=2){
-            int o = mono.size()-1;
-            if((b[mono[o]]-b[i])*(a[mono[o]]-a[mono[o-1]])>(b[mono[o-1]]-b[mono[o]])*(a[i]-a[mono[o]]) || (mono[o-1]+k)*(a[i]-a[mono[o]])<(b[mono[o]]-b[i])){
+            int o = mono.size()-1;//
+            if((b[mono[o]]-b[i])*(a[mono[o]]-a[mono[o-1]])>(b[mono[o-1]]-b[mono[o]])*(a[i]-a[mono[o]]) || (mono[o-1]+k)*(a[i]-a[mono[o]])<(b[mono[o]]-b[i])){//the part before || means that we need to make sure that convexity always hold.  the part after || means that we need to make sure that the point we are poping will never be the best line, to make sure of that we use the slope where the point expire to test it, if it is better than we don't pop that;
                 break;
             }
             mono.pop_back();
