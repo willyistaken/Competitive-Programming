@@ -7,13 +7,9 @@ for line in sys.stdin:
         break
     if(s[1].find('+')!=-1):
         print(a+b)
-        continue
     if(s[1].find('-')!=-1):
         print(a-b)
-        continue
     if(s[1].find('*')!=-1):
         print(a*b)
-        continue
     if(s[1].find('/')!=-1):
-        print("{}...{}".format(int((a-a%b)/(b)),a%b))
-        continue
+        print("{}...{}".format(a//b,a%b))
