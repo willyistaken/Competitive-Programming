@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
-long long dis(int x,int y,int ax,int ay){
-    if(((long long) (x-ax)*(x-ax))+((long long) (y-ay)*(y-ay))==0) return LONG_LONG_MAX;
-    return ((long long) (x-ax)*(x-ax))+((long long) (y-ay)*(y-ay));
+double dis(int x,int y,int ax,int ay){
+    if(((double) (x-ax)*(x-ax))+((double) (y-ay)*(y-ay))==0) return LONG_LONG_MAX;
+    return ((double) (x-ax)*(x-ax))+((double) (y-ay)*(y-ay));
 }
-long long solve(vector<pair<int, int> > &pointset,int l,int r){
+double solve(vector<pair<int, int> > &pointset,int l,int r){
     if(r-l<=1){
         if(pointset[r].second<pointset[l].second){
             swap(pointset[r],pointset[l]);
@@ -13,8 +13,8 @@ long long solve(vector<pair<int, int> > &pointset,int l,int r){
     }
     int mid = (l+r)/2;
     int xmid = (pointset[mid].first+pointset[mid+1].first)/2;
-    long long left = solve(pointset,l,mid);
-    long long right= solve(pointset,mid+1,r);
+    double left = solve(pointset,l,mid);
+    double right= solve(pointset,mid+1,r);
     int d = ceil(sqrt(min(left,right)) );
     queue<pair<int,int> > q;
     int lhead = l;
@@ -36,7 +36,7 @@ long long solve(vector<pair<int, int> > &pointset,int l,int r){
         }
         }
     }
-    long long mincd=LONG_LONG_MAX;
+    double mincd=LONG_LONG_MAX;
     for(int i=l;i<=r;i++){
         pointset[i] = q.front();
 
@@ -73,8 +73,6 @@ int main(){
         pointset[i].second = y;
     }
     sort(pointset.begin(),pointset.end());
-    cout<<setprecision(6)<<fixed<<sqrt((long double)solve(pointset,0,n-1))<<endl;
+    printf("%.6lf\n",sqrt(solve(pointset,0,n-1)));
     }
 }
-
-// need fixing but should works in most of scenarios
