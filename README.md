@@ -4,6 +4,6 @@
 using namespace std;
 
 int main(){
-  cout<<我超弱<<endl;
+  cout<<"我超弱"<<endl;
 }
 ```
