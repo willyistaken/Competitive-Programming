@@ -2,10 +2,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+string day[7]={"Sunday\n","Monday\n","Tuesday\n","Wednesday\n","Thursday\n","Friday\n","Saturday\n"};
 int main(){
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    puts((0.1+0.2==0.3)? "yes":"no");
-    printf("%.19lf",0.1+0.2);
+    int n;
+    while(cin>>n){
+        cout<<day[(5+n)%7];
+    }
+
 
 
 

@@ -21,32 +21,19 @@ int main(){
     int n,m;cin>>n>>m;
     road arr[m];
     vector<int> father(n+1);
+    vector<vector<int> >  sides(n);
     for(int i=0;i<m;i++) {
         road temp;
         cin>>temp.from>>temp.to>>temp.w;
         arr[i]=temp;
+        sides[temp.from].push_back(temp.to);
+        sides[temp.to].push_back(temp.from);
     }  
-    sort(arr,arr+m,[](const road &a,const road &b){return a.w<b.w;});
-    for(int i=0;i<=n;i++) father[i]=i;
-    int ans=0;
-    for(int i=0;i<m;){
-        int howmanyworks=0;
-        int lastwork=-1;
-        int wnow=arr[i].w;
-        while(arr[i].w==wnow){
-            if(query(arr[i].from,father)!=query(arr[i].to,father)){
-                howmanyworks+=1;
-                lastwork=i;
-            }
-            i+=1;
-        }
-        ans+=howmanyworks-1;
-        if(lastwork>0) join(arr[lastwork].from,arr[lastwork].to,father);
-    }
-    cout<<min(m-n+1,ans)<<endl;
+   //find brige tarjan's BCC
+   bool is_brige[n]; 
 
 
-
+    //dsu find not in any mst path and find need remove path;
 
     return 0;
 }
