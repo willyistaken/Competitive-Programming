@@ -6,19 +6,19 @@ typedef long long ll;
 // a naive gready doesn't work ex: in the case of 1-2-3-4-5
 //new gready https://cs.stackexchange.com/questions/12177/correctness-proof-of-a-greedy-algorithm-for-minimum-vertex-cover-of-a-tree
 bitset<100050> vis;
-bitset<10050> select[n]={0};
-void dfs(int from,int a,vector<vector<int> > &sides,int* dp){
-    if(dp[a]) return dp[a];
+bitset<10050> cover;
+int ans=0;
+void dfs(int a,vector<vector<int> > &sides,vector<int> father,vector<int> depth,int depth){
+    if(vis[a]) return;
     vis[a]=1;
-    int minifinsum=1;
-    for(auto i : sides[a]){
-        for(auto j:sides[i]){
-            minifinsum+=dfs(i,j,sides,dp);
-        }
+    for(auto i: sides[a]) {
+        if(!vis[i]) {
+            father[i]=a;
+            dfs(i,sides,father);
+        } 
     }
-    int minifnotsum=len(sides[a]-(a!=0));
-    for(auto i :sides[a])
 }
+
 int main(){
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
     int n;cin>>n;
@@ -29,6 +29,10 @@ int main(){
         sides[a].push_back(b);
         sides[b].push_back(a);
     }
-   
+    father[0]=-1;
+    vector<int> depth[n];
+    dfs(-1,0,sides,depth);
+    
+    cout<<ans<<endl;
 
 }
