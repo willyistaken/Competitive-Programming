@@ -13,11 +13,5 @@ int main(){
         ans+=(arr[i]-arr[i-1])*(arr[i]-arr[i-1]);
     }
     cout<<ans<<endl;
-
-
-
-
-
-
     return 0;
 }
