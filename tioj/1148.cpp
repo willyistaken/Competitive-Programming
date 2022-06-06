@@ -13,12 +13,11 @@ vec operator-(const vec &a,const vec &b){
     return {a.x-b.x,a.y-b.y};
 }
 int main(){
-	int t;scanf("%d",&t);
-	while(t--){
-    int n;scanf("%d",&n);
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    int n;cin>>n;
     vec arr[n];
     for(int i=0;i<n;i++){
-		scanf("%lld %lld",&arr[i].x,&arr[i].y);
+        cin>>arr[i].x>>arr[i].y;
     }
     sort(arr,arr+n,[](const vec &a,const vec &b){return (a.x<b.x || (a.x==b.x && a.y<b.y));}) ;
     vector<int> convexhull;
@@ -42,12 +41,9 @@ int main(){
             }
             convexhull.push_back(i);
         }
-		double sum=0;
-		for(int i=0;i<convexhull.size()-1;i++){
-			sum += arr[convexhull[i]]^arr[convexhull[i+1]];
-		}	
-		printf("%.1f\n",fabs(sum/(double) 2));
-	}
+    cout<<convexhull.size()-1<<endl;
+
+
 
 
 
@@ -55,4 +51,3 @@ int main(){
 
     return 0;
 }
-
