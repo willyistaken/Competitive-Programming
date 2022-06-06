@@ -9,7 +9,7 @@ struct vec{
 	double y;
 };
 
-const double eps = 1e-5;
+const double eps = 1e-3;
 int sign(double a){
 	if(fabs(a)<=eps) return 0;
 	return (a>0) ? 1:-1;
@@ -25,45 +25,42 @@ vec operator-(const vec &a,const vec &b){
 }
 
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int t;cin>>t;
+	int t;scanf("%d",&t);
+	int n;
 	while(t--){
-		int n;cin>>n;
+		scanf("%d",&n);
 		vec arr[n];
 		for(int i=0;i<n;i++){
-			cin>>arr[i].x>>arr[i].y;	
+			scanf("%lf  %lf",&arr[i].x,&arr[i].y);
 		}
-	sort(arr,arr+n,[](const vec &a,const vec &b){return (a.x<b.x || (a.x==b.x && a.y>b.y));});		
-	deque<int> down;
-	down.push_back(0);
-	for(int i=1;i<n;i++){
-		while(down.size()>1){
-			if(sign((arr[down[down.size()-1]]-arr[down[down.size()-2]])^(arr[i]-arr[down[down.size()-1]]))<=0){
+	sort(arr,arr+n,[](const vec &a,const vec &b){return (a.x<b.x || (a.x==b.x && a.y<b.y));});		
+	vector<int> convexhull;
+	for(int i=0;i<n;i++){
+		while(convexhull.size()>=2){
+			if(sign((arr[convexhull[convexhull.size()-1]]-arr[convexhull[convexhull.size()-2]])^(arr[i]-arr[convexhull[convexhull.size()-1]]))>0){
 				break;	
 			}
-			down.pop_back();
+			convexhull.pop_back();
 		}
-		down.push_back(i);
+		convexhull.push_back(i);
 	}
-	deque<int> up;
-	up.push_back(n-1);
-	for(int i=n-2;i>=0;i--){
-		while(up.size()>1){
-			if(sign((arr[up[up.size()-1]]-arr[up[up.size()-2]])^(arr[i]-arr[up[up.size()-1]]))<=0){
+	convexhull.pop_back();	
+	int s = convexhull.size();
+	for(int i=n-1;i>=0;i--){
+		while(convexhull.size()-s>=2){
+			if(sign((arr[convexhull[convexhull.size()-1]]-arr[convexhull[convexhull.size()-2]])^(arr[i]-arr[convexhull[convexhull.size()-1]]))>0){
 				break;	
 			}
-			up.pop_back();
+			convexhull.pop_back();
 		}
-		up.push_back(i);
+		convexhull.push_back(i);
 	}
 	double sum=0;
-	for(int i=1;i<down.size();i++){
-		sum+=arr[down[i]]^arr[down[i-1]];	
+	//cout<<convexhull[0]<<" ";
+	for(int i=0;i<convexhull.size()-1;i++){
+		sum += (arr[convexhull[i]]^arr[convexhull[i+1]]	)/2;
 	}
-	for(int i=1;i<up.size();i++){
-		sum +=arr[up[i]]^arr[up[i-1]];
-	}
-	cout<<setprecision(1)<<fixed<<sum/2<<endl;
+	printf("%.1lf\n",fabs(sum));
 	}
 
 	return 0;
