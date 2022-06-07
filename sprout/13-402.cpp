@@ -42,11 +42,19 @@ int main(){
             }
             convexhull.push_back(i);
         }
-		double sum=0;
+		ll sum=0;
 		for(int i=0;i<convexhull.size()-1;i++){
 			sum += arr[convexhull[i]]^arr[convexhull[i+1]];
 		}	
-		printf("%.1f\n",fabs(sum/(double) 2));
+		printf("%lld",sum/2);
+		if(sum%2){
+			printf(".5\n");	
+		}else{
+			printf(".0\n");	
+		}
+		
+		
+
 	}
 
 
@@ -55,4 +63,4 @@ int main(){
 
     return 0;
 }
-
+// DO NOT USE DOUBLE!!!
