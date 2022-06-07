@@ -14,5 +14,6 @@ int mie(int n,int m,int ns,int nr,int ms,int mr){
 */
 int main(){
     int n,m;cin>>n>>m;
-    cout<<mie(n,m,1,0,0,1)<<endl;
+    cout<<mie(n,m,1,0,0,1)+m<<endl;
+    cout<<2*500000005<<endl;
 }
