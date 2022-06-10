@@ -1,64 +1,45 @@
-#include "lib1227.h"
-#include <bits/stdc++.h>
+#pragma GCC optimize("O2")
+//#include "lib1227.h"
+#include <iostream>
 using namespace std;
 typedef long long ll;
 
 int N;
-
-
-struct bit{
-	vector<ll> arr;
-	void change(int ind,ll v){
-		while(ind<=arr.size()){
-			arr[ind]+=v;
-			ind += (ind & -ind);
-		}
-	}
-	ll mquery(int ind){
-		ll sum=0;
-		while(ind){
-			sum+=arr[ind];
-			ind -= (ind & -ind);
-		}
-		return sum;
-	}
-};
-bit DE;
-bit DO;
+long long D[1000005];
+bool question;
 void init(int n, long long d[]) {
 	N = n;
-	for(int i=0;i<=n;i++){
-		(DE.arr).push_back(0);	
-		(DO.arr).push_back(0);	
-	}
-	DO.change(1,d[0]);
-	DE.change(2,d[1]);
-	for(int i=3;i<=n;i++){
-		if(i%2) DO.change(i,d[i-1]-d[i-3]);		
-		else DE.change(i,d[i-1]-d[i-3]);
+	D[0] = d[0];
+	D[1] = d[1];
+	for(int i=2;i<n;i++){
+		D[i] = d[i]-d[i-2];
 	}
 }
 
 void change(int a, int b, long long k) {
-	a+=1;
-	b+=1;
-	DO.change(a,-k);
-	DE.change(a,k);
-	if(b<N){
-		DO.change(b+1,k);
-		DE.change(b+1,-k);
+	D[a]+=-k;
+	D[a+1]+=k;
+	if((b+1)%2 == a%2) k = -k;
+	D[b+2]+=k;
+	D[b+1]+=-k;
+	
+/* 	DO[a]+=-k;
+	DE[a]+=k;
+	if(b<N-1){
+		DO[b+1]+=k;
+		DE[b+1]+=-k;
+	} */
+}
+long long query(int c) {
+	if(!question){
+		for(int i=2;i<N;i++){
+			D[i]=D[i-2]+D[i];
+		}
 	}
+	question = 1;
+	return D[c];
 }
 
-long long query(int c) {
-	c+=1;
-	if(c%2){
-		return DE.mquery(c)+1;	
-	}else{
-		return DO.mquery(c)+1;	
-	}
-}
-/*
 int main(){
 	int n,m,q;cin>>n>>m>>q;
 	long long d[n];
@@ -70,12 +51,8 @@ int main(){
 		cin>>a>>b>>k;
 		change(a,b,k);
 	}
-	for(int j=0;j<q;j++){
-		int c;
-		cin>>c;
-		cout<<query(c)<<endl;
+	for(int i=0;i<n;i++){
+		cout<<query(i)<<" ";
 	}
-
+	cout<<endl;
 }
-*/
-
