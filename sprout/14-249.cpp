@@ -2,52 +2,59 @@
 using namespace std;
 typedef long long ll;
 
-int N[100010];
-ll sum[100010];
-ll lmax(int ql,int qr);
-ll rmax(int ql,int qr);
-ll segsum(int ql,int qr);
-map<pair<int,int>,ll> qmap;
-map<pair<int,int>,ll> lmaxmap;
-map<pair<int,int>,ll> rmaxmap;
-ll query(int ql,int qr){
-	if(qr-ql==1) return N[ql];
-	if(qmap.count(make_pair(ql,qr))) return qmap[make_pair(ql,qr)];
-	ll maxn = max(query(ql,(ql+qr)/2),query((ql+qr)/2,qr));
-	maxn = max(maxn,lmax((ql+qr)/2,qr)+rmax(ql,(ql+qr)/2));
-	qmap.insert({{ql,qr},maxn});
-	return maxn;
+struct node{
+	ll ans;
+	ll lmax;
+	ll rmax;
+	ll sum;
+};
+node combine(const node &a,const node &b){
+	node r;
+	r.sum = a.sum+b.sum;
+	r.lmax = max(a.lmax,a.sum+b.lmax);
+	r.rmax = max(b.rmax,b.sum+a.rmax);
+	r.ans =  max({a.ans,b.ans,a.rmax+b.lmax});
+	return r;
+}
+int n;
+void change(int ind,node s,vector<node> &segtree){
+	ind+=n;
+	segtree[ind]=s;
+	ind>>=1;
+	while(ind){
+		segtree[ind] = combine(segtree[2*ind],segtree[2*ind +1]);
+		ind>>=1;
+	}
 }
 
-ll lmax(int ql,int qr){
-	if(qr-ql==1) return N[ql];	
-	if(lmaxmap.count(make_pair(ql,qr))) return lmaxmap[make_pair(ql,qr)];
-	ll k = max(lmax(ql,(ql+qr)/2),segsum(ql,(ql+qr)/2)+lmax((ql+qr)/2,qr))	;	
-	lmaxmap.insert({{ql,qr},k});
-	return k;
+node query(int l,int r,vector<node> &segtree){
+	l+=n;
+	r+=n;
+	node rr={(long long)-1e15,(long long)-1e15,(long long)-1e15,0LL};
+	node lr={(long long)-1e15,(long long)-1e15,(long long)-1e15,0LL};
+	while(l<r){
+		if(l%2) lr = combine(lr,segtree[l++]);
+		if(r%2) rr = combine(segtree[--r],rr);
+		l>>=1;
+		r>>=1;
+	}
+	return combine(lr,rr);
 }
-ll rmax(int ql,int qr){
-	if(qr-ql==1) return N[ql];	
-	if(rmaxmap.count(make_pair(ql,qr))) return rmaxmap[make_pair(ql,qr)];
-	ll k = max(rmax((ql+qr)/2,qr),segsum((ql+qr)/2,qr)+rmax(ql,(ql+qr)/2))	;	
-	rmaxmap.insert({{ql,qr},k});
-	return k;
-}
-ll segsum(int ql,int qr){
-	return sum[qr]-sum[ql];
-}
+
+
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n;cin>>n;
+	cin>>n;
 	int q;cin>>q;
+	vector<node> segtree(2*n,{0,0,0,0});
 	for(int i=0;i<n;i++){
-		cin>>N[i];
-		sum[i+1]=sum[i]+N[i];
+		int a;cin>>a;
+		change(i,{a,a,a,a},segtree);
 	}
 	for(;q;q--){
-		int ql,qr;cin>>ql>>qr;
-		ql-=1;
-		cout<<max(0LL,query(ql,qr))<<endl;
+		int l,r;cin>>l>>r;
+		l-=1;
+		cout<<max(0LL,query(l,r,segtree).ans)<<endl;
 	}
 	return 0;
 }
