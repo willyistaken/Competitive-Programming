@@ -8,10 +8,12 @@ struct node{
 	int zcount=1;
 	int ocount=0;
 	int tcount=0;
-	bool reset=0;
+	int reset=0;
 	int add=0;
 	void Freset(){
 			zcount = zcount+ocount+tcount;
+			ocount=0;
+			tcount=0;
 			add=0;
 			reset=1;
 	}
@@ -31,10 +33,10 @@ void pull(int ind,vector<node> &segtree){
 	if(ind==1) return;
 	pull(ind>>1,segtree);
 	if(segtree[ind>>1].reset){
-		segtree[ind>>1].reset=0;
 		segtree[ind].Freset();
 		segtree[ind^1].Freset();
 	}
+	segtree[ind>>1].reset=0;
 	segtree[ind].plus(segtree[ind>>1].add);
 	segtree[ind^1].plus(segtree[ind>>1].add);
 	segtree[ind>>1].add=0;
@@ -91,19 +93,19 @@ void setz(int l,int r,vector<node> &segtree){
 
 int query(int l,int r,vector<node> &segtree){
 	l+=n;r+=n;
-	pull(l,segtree);
-	pull(r-1,segtree);
 	int sum=0;
 	while(l<r){
 		if(l%2){
 			pull(l,segtree);
 			sum += segtree[l].zcount;
+			push(l,segtree);
 			l++;
 		}
 		if(r%2){
 			--r;
 			pull(r,segtree);
 			sum += segtree[r].zcount;
+			push(r,segtree);
 		}
 		l>>=1;r>>=1;
 	}
@@ -112,7 +114,6 @@ int query(int l,int r,vector<node> &segtree){
 
 
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	cin>>n;
 	int m;cin>>m;
 	vector<node> segtree(2*n);
@@ -132,6 +133,7 @@ int main(){
 	if(s[0]=='C'){
 		cout<<query(l,r,segtree)<<endl;
 	}
+
 	}
 	return 0;
 }

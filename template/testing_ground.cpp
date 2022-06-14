@@ -1,13 +1,25 @@
 #pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
-#include <bit>
 using namespace std;
 typedef long long ll;
+inline int nextpowerofn(int n){
+	n |= n>>1;
+	n|= n>>2;
+	n|= n>>4;
+	n|= n>>8;
+	n|= n>>16;
+	n|= n>>31;
+	return n+1;
+}
 int main(){
 	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-	for(int i=1;i<=100;i++){
-		if(__builtin_popcount(i)>__lg(i)+1-__builtin_popcount(i)) cout<<i<<endl;
+	for(int i=0;i<=100;i++){
+		cout<<i<<" "<<nextpowerofn(i)<<endl;
 	}
+
+
+
+
 
 
 
