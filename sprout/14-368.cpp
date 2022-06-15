@@ -6,14 +6,17 @@ struct node{
 	int ans=0;
 	int add=0;
 	int replace=0;
-	void plus(int n){
-		ans+=n;
-		add=+n;
+	void plus(int v){
+		ans+=v;
+		add+=v;
 	}
-	void setv(int n){
+	void setv(int v){
 		add=0;
-		ans=n;
-		replace=n;
+		ans=v;
+		replace=v;
+	}
+	void print(){
+		cout<<" "<<ans<<" "<<add<<" "<<replace<<"\n";
 	}
 };
 void pull(int ind,vector<node> &segtree){
@@ -32,6 +35,7 @@ void push(int ind,vector<node> &segtree){
 	ind>>=1;
 	while(ind){
 		segtree[ind].ans = max(segtree[2*ind].ans,segtree[2*ind +1].ans);
+		ind>>=1;
 	}
 }
 
@@ -91,34 +95,33 @@ int query(int l,int r,vector<node> &segtree){
 	}
 	return result;
 }
-void built(vector<node> &segtree){
-	int t[n];
-	for(int i=0;i<n;i++) cin>>t[i];
-	for(int i=2*n-1;i>=1;i--){
-		if(i>=n) segtree[i].ans = t[i-n];
-		if(i%2==0) segtree[i>>1].ans = max(segtree[i].ans,segtree[i^1].ans);
-	}
+void built(int i,vector<node> &segtree){
+	if(i>=n) return;
+	built(i*2,segtree);
+	built(2*i+1,segtree);
+	segtree[i].ans = max(segtree[2*i].ans,segtree[2*i+1].ans);
 }
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	cin>>n;		
+	cin>>n;	int q;	cin>>q;
 	vector<node> segtree(2*n);
-	int q;cin>>q;
-	built(segtree);
+	for(int i=0;i<n;i++) cin>>segtree[i+n].ans;
+	built(1,segtree);
 	for(;q;q--){
 		int type;cin>>type;
 		int l,r;cin>>l>>r;
 		l-=1;
 		if(type==1){
-			int v;cin>>v;addr(l,r,v,segtree);	
+			int v;cin>>v;
+			addr(l,r,v,segtree);	
 		}
 		if(type==2){
 			cout<<query(l,r,segtree)<<endl;
 		}
 		if(type==3){
-			int v;cin>>v;replacer(l,r,v,segtree);
+			int v;cin>>v;
+			replacer(l,r,v,segtree);
 		}
-
 	}
 	return 0;
 }
