@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include "lib1895.h"
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 using namespace std;
@@ -45,22 +46,16 @@ void upd(int l,int r,bool type,int h,vector<node> &segtree){
 	}
 }
 
-
-int main(){
-	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-	cin>>n;
-	vector<node> segtree(2*n);
-	int m;cin>>m;
-	int type;int l,r;int h;
-	for(int i=0;i<m;i++){
-		cin>>type;
-		cin>>l>>r;
-		cin>>h;
-		upd(l,r+1,!(type-1),h,segtree);	
-	}
-	for(int i=0;i<n;i++){
-		pull(i+n,segtree);
-		cout<<MIN(segtree[i+n].mx,segtree[i+n].mn)<<"\n";
-	}
-	return 0;
+void buildWall(int _n, int k, int op[], int l[], int r[], int h[], int finalHeight[]) {
+    n = _n;
+    vector<node> segtree(2*_n);
+  
+    for (int i = 0; i < k; ++i) {
+        upd(l[i],r[i]+1,!(op[i]-1),h[i],segtree);
+    }
+    for (int i = 0; i < _n; ++i) {
+        pull(i+_n,segtree);
+        finalHeight[i] = segtree[i+_n].mx;
+    }
 }
+
