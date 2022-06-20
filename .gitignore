@@ -14,5 +14,6 @@
 .vscode/tasks.json
 *.exe
 *.out
-lib*
+lib*.h
+
 */tempCodeRunnerFile.cpp
