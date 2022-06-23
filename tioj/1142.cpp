@@ -1,13 +1,15 @@
-#pragma GCC optimize("Ofast")
+#pragma GCC optimize("O2")
 #include <cstdio>
 #include <vector>
 #include <queue>
 #include <set>
 #include <algorithm>
+#include <bitset>
 using namespace std;
 typedef long long ll;
 const int S=5e4;
-char outbuf[S]; int outp;
+char outbuf[S]; int outp;int head;int maxtime;int nw;queue<int> inzero;short ans;
+bitset<100050> s;
 inline void W(int n){
 	static char buf[12], p;
 	if(n == 0) outbuf[outp++] = '0';
@@ -37,11 +39,10 @@ int main(){
         rsides[b-1].push_back(a-1);
     }
    int toposort[n];
-   queue<int> inzero;
    for(int i=0;i<n;i++){
        if(in[i]==0) inzero.push(i);
    } 
-   int nw=0;
+   
     while(!inzero.empty()){
         int temp = inzero.front();
         inzero.pop();
@@ -55,7 +56,7 @@ int main(){
         }
     }
     pair<int,int> dp[n]={{0,-1}};
-    int maxtime=0;
+    
     for(int i=0;i<n;i++){
         int maxn=0;
         int maxid=-1;
@@ -66,18 +67,20 @@ int main(){
         dp[toposort[i]]={maxn+time[toposort[i]],maxid};
         maxtime=max(maxtime,dp[toposort[i]].first);
     }
-    set<int> s;int head;
+    
+    
     for(int i=0;i<n;i++){
         if(dp[i].first>=maxtime){
             head=i;
             while(head>=0){
-                s.insert(head);
+                ans+=!s[head];
+                s.set(head);
                 head=dp[head].second;
             } 
         }
     }
       
-    W(s.size());
+    W(ans);
     fwrite(outbuf, 1, outp, stdout);
     return 0;
 }
