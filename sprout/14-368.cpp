@@ -34,47 +34,45 @@ void pull(int ind,vector<node> &segtree){
 void push(int ind,vector<node> &segtree){
 	ind>>=1;
 	while(ind){
-		segtree[ind].ans = max(segtree[2*ind].ans,segtree[2*ind +1].ans);
+		segtree[ind].ans =(segtree[ind].replace) ? segtree[ind].replace+segtree[ind].add:max(segtree[2*ind].ans,segtree[2*ind +1].ans)+segtree[ind].add;
 		ind>>=1;
 	}
 }
 
 void addr(int l,int r,int v,vector<node> &segtree){
 	l+=n; r+=n;
+	pull(l,segtree);pull(r-1,segtree);
+	int tl=l;int tr=r;
 	while(l<r){
 		if(l%2){
-			pull(l,segtree);
 			segtree[l].plus(v);
-			push(l,segtree);
 			l++;
 		}
 		if(r%2){
 			--r;
-			pull(r,segtree);
 			segtree[r].plus(v);
-			push(r,segtree);
 		}
 		l>>=1;r>>=1;
 	}
+	push(tl,segtree);push(tr-1,segtree);
 }
 
 void replacer(int l,int r,int v,vector<node> &segtree){
 	l+=n; r+=n;
+	pull(l,segtree);pull(r-1,segtree);
+	int tl=l;int tr=r;
 	while(l<r){
 		if(l%2){
-			pull(l,segtree);
 			segtree[l].setv(v);
-			push(l,segtree);
 			l++;
 		}
 		if(r%2){
 			--r;
-			pull(r,segtree);
 			segtree[r].setv(v);
-			push(r,segtree);
 		}
 		l>>=1;r>>=1;
 	}
+	push(tl,segtree);push(tr-1,segtree);
 }
 
 int query(int l,int r,vector<node> &segtree){

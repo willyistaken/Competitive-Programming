@@ -16,7 +16,7 @@ int main(){
         auto it=s.lower_bound(r);
         auto it2=it;
         it2--;
-//  note to self: originally the above 3 lines looks like this:
+//  note to self:  the above 3 lines originaly looks like this:
 /*      auto it = s.lower_bound(r);
         auto it2=it--;
 */
