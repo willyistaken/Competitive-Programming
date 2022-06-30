@@ -3,32 +3,13 @@
 using namespace std;
 typedef long long ll;
 int main(){
-    srand( time(NULL) );
-    int n = rand()%20;int q=rand()%20;
-    cout<<n<<" "<<q<<endl;
-    for(int i=0;i<n;i++){
-        cout<<2*rand()<<" ";
-    }
-    cout<<endl;
-    for(int i=0;i<q;i++){
-        int type=rand()%2;
-        if(type){
-            cout<<2<<" ";
-            int l=rand()%n +1;
-            int r=rand()%n +1;
-            if(l>r) swap(l,r);
-            cout<<l<<" "<<r<<endl;
-        }else{
-            cout<<1<<" ";
-            int l=rand()%n +1;
-            int r=rand()%n +1;
-            if(l>r) swap(l,r);
-            int v = rand();
-            cout<<l<<" "<<r<<" "<<v<<endl;
-        }
-    }
-
-
+	srand(time(0));
+	int arr[9]={0,1,2,3,4,5,6,7,8};
+	random_shuffle(arr,arr+9);
+	for(int i=0;i<9;i++) cout<<arr[i]<<" ";
+	cout<<"\n";
+	random_shuffle(arr,arr+9);
+	for(int i=0;i<9;i++) cout<<arr[i]<<" ";
 
 
 
