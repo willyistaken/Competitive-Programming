@@ -1,4 +1,5 @@
 # .vimrc
+```
 :set ai
 :set bg=dark
 :set tabstop=4
@@ -23,7 +24,7 @@ map m $
 map n ^
 imap <F5> <Esc><F5>
 imap <F12> #include<bits/stdc++.h><CR>using namespace std;<CR>typedef long long ll;<CR><CR><CR><CR>int main(<Esc>la{<CR>	ios_base::sync_with_stdio(0jjla,cin.tie(0jjla,cout.tie(0jjla;<CR><CR><CR>return 0;<CR><Bs>
-
+```
 # 其他
 
 
