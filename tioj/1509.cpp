@@ -1,50 +1,55 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-
+vector<vector<pair<int,int> > > side;
+vector<vector<pair<int,int> > > rside;
 
 
 int main(){
-	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	int n,m;cin>>n>>m;
-	vector<vector<pair<int,int> > > side(n);
-	
+	side.resize(n);rside.resize(n);
 	for(int i=0;i<m;i++){
-		int a,b,w;cin>>a>>b>>w;
-		a-=1;
-		b-=1;
-		side[a].push_back({b,w});
-		side[b].push_back({a,w});
+		int a,b,r;cin>>a>>b>>r;
+		a--;b--;
+		side[a].push_back({b,r});
+		rside[b].push_back({a,r});
 	}
-	vector<ll> dis(n,1e10);
-	dis[0]=0;
-	queue<int> q;
-	q.push(0);
-	while(!q.empty()){
-		int t=q.front();
-		q.pop();
-		for(int i=0;i<side[t].size();i++){
-			if(dis[side[t][i].first]>dis[t]+side[t][i].second)	{
-				dis[side[t][i].first] = dis[t]+side[t][i].second;
-				q.push(side[t][i].first);
+	ll disto[n];
+	ll disback[n];
+	fill(disto,disto+n,1e15);
+	fill(disback,disback+n,1e15);
+	disto[0]=disback[0]=0;
+	queue<int> tbp;//to be process
+	tbp.push(0);
+	while(!tbp.empty()){
+		for(auto p:side[tbp.front()]){
+			if(disto[tbp.front()]+p.second<disto[p.first]){
+				disto[p.first] =	disto[tbp.front()]+p.second;
+				tbp.push(p.first);
 			}
-
 		}
+		tbp.pop();
 	}
-	ll sum=0;
+	tbp.push(0);
+	while(!tbp.empty()){
+		for(auto p:rside[tbp.front()]){
+			if(disback[tbp.front()]+p.second<disback[p.first]){
+				disback[p.first] =	disback[tbp.front()]+p.second;
+				tbp.push(p.first);
+			}
+		}
+		tbp.pop();
+	}
+	ll ans=0;
 	for(int i=0;i<n;i++){
-		if(dis[i]>5*1e9){
-			cout<<0<<endl;
+		if(disto[i]>5e14 || disback[i]>5e14){
+			cout<<0<<"\n";
 			return 0;
+		}else{
+			ans+=disto[i]+disback[i];
 		}
-		sum+=dis[i];
-
 	}
-	cout<<sum<<endl;
+	cout<<ans<<"\n";
 	return 0;
-
-
-
 }
-
-
