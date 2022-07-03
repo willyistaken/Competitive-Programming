@@ -1,21 +1,28 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-
-
-
+ 
+int n, r, used[10];
+vector <long long> v;
+ 
+void f(int pos, long long now){
+    if (pos == r){
+        v.push_back(now);
+        return;
+    }
+    for (int i = 0; i < n; i++){
+        if (used[i]) continue;
+        used[i] = 1;
+        now *= 10;
+        now += i;
+        f(pos+1, now);
+        now /= 10;
+        used[i] = 0;
+    }
+}
+ 
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n;cin>>n;
-	int mod = 20;
-	for(int i=0;i<n;i++){
-		cout<<i%mod<<" ";
-	}
-	cout<<"\n";
-	for(int i =0 ;i<n;i++){
-		cout<<2*i%mod<<" ";
-	}
-	cout<<"\n";
-
-	return 0;
+    cin >> n >> r;
+    f(0, 0);
+    if (v.size() < (n+r)) cout << v[0] << "\n";
+    else cout << v[v.size()-(n+r)] << "\n";
 }
