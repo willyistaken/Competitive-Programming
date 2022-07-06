@@ -1,4 +1,3 @@
-#pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
@@ -19,39 +18,41 @@ void dfs(char type,int x,int y,vector<vector<char> > &arr){
     }
 }
 int main(){
-    //ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    while(scanf("%d %d",&n,&m)!=EOF){
-    vector<vector<char> > arr(n,vector<char>(m));
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    while(cin>>n>>m){
+    vector<vector<char> > arr1(n,vector<char>(m,'0'));
+	vector<vector<char> > arr2(n,vector<char>(m,'0'));
     for(int i=0;i<n;i++){
         string s;cin>>s;
         for(int j=0;j<m;j++){
-           arr[i][j]=s[j]; 
+			if(s[j]-'0') arr1[i][j]='1';
+			if(s[j]-'0'==2) arr2[i][j]='2';
         }
     }
     int dice=0;
     int point=0;
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
-            if(arr[i][j]=='1'){
+            if(arr1[i][j]=='1'){
                 dice+=1;
-                dfs('1',i,j,arr);
+                dfs('1',i,j,arr1);
             }
-        }
-    }
-
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
-            if(arr[i][j]=='2'){
+            if(arr2[i][j]=='2'){
                 point+=1;
-                dfs('2',i,j,arr);
+                dfs('2',i,j,arr2);
             }
         }
     }
 
-    cout<<dice<<" "<<point<<endl;
-    }
+
+    cout<<dice<<" "<<point<<"\n";
+   }
 
 
 
     return 0;
 }
+
+
+//f*ck this , this is one of the most stupid problem on tioj
+//2 also means dice(it also connect 1);
