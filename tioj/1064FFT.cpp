@@ -3,8 +3,8 @@ using namespace std;
 typedef long long ll;
 typedef complex<long double> cn;
 int n;
-const int unitsize = 1e9;
-const int unitsizep = 9;
+const int unitsize = 1e3;
+const int unitsizep = 3;
 int savemeprecision;
 struct bigint{
 	int size;
