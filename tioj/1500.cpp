@@ -66,6 +66,19 @@ double solve(vector<pair<int, int> > &pointset,int l,int r){
 int main(){
     int n;
     while(cin>>n){
+	if(n<=1000){
+		pair<double,double> arr[n];
+		for(int i=0;i<n;i++){
+			cin>>arr[i].first>>arr[i].second;
+		}
+		double minn = 1e15;
+		for(int i=0;i<n;i++){
+			for(int j=i+1;j<n;j++){
+				minn = min(minn,sqrt( (arr[i].first-arr[j].first)*(arr[i].first-arr[j].first) + (arr[i].second-arr[j].second)*(arr[i].second-arr[j].second)   ));	
+			}
+		}
+		printf("%.6lf\n",minn);
+	}else{
     vector<pair<int,int> > pointset(n);
     for(int i=0;i<n;i++){
         int x,y;cin>>x>>y;
@@ -74,5 +87,6 @@ int main(){
     }
     sort(pointset.begin(),pointset.end());
     printf("%.6lf\n",sqrt(solve(pointset,0,n-1)));
+	}
     }
 }
