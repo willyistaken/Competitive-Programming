@@ -4,27 +4,14 @@ using namespace std;
 typedef long long ll;
 int main(){
 	srand(time(0));
-	int t = rand();
-	t%=5;
-	t++;
-	while(t--){
-		int n =rand()%20;		
-		n++;
-		cout<<n<<"\n";
-		for(int i=0;i<n;i++){
-			int l = rand()%n;	
-			int r = rand()%n;	
-			int u = rand()%n;	
-			int d = rand()%n;	
-			l++;r++;u++;d++;
-			if(l>r) swap(l,r);
-			if(u>d) swap(u,d);
-			cout<<l<<" "<<r<<" "<<u<<" "<<d<<"\n";
-		}
-		cout<<"\n";
-	}
-
-
-
-    return 0;
+	int n = rand();
+	n%=50;
+	cout<<n<<"\n";
+	int a[n];
+	int b[n]; 
+	for(int i=1;i<=n;i++) a[i-1]=b[i-1]=i;
+	random_shuffle(a,a+n);
+	random_shuffle(b,b+n);
+	for(int i=0;i<n;i++) cout<<a[i]<<" \n"[i==n-1];
+	for(int i=0;i<n;i++) cout<<b[i]<<" \n"[i==n-1];
 }
