@@ -84,3 +84,4 @@ int main(){
 	}	
 	return 0;
 }
+// it is like binary searching a reverse pair problem
