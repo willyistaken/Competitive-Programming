@@ -1,22 +1,22 @@
 #pragma GCC optimize("Ofast")
-#include <bits/stdc++.h>
+#include<cstdio>
 using namespace std;
 typedef long long ll;
 int n;
 
 int main(){
-    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    cin>>n;
-    string s;cin>>s;
+    scanf("%d",&n);
+	char s[n+5];
+	scanf("%s",s);
     if(n==1){
-        cout<<"Yes\n";
+        puts("Yes");
         return 0;
     }
     if(n==2 ){
         if(s[0]!=s[1]){
-            cout<<"No\n";  
+        	puts("No");
         }else{
-            cout<<"Yes\n";
+        	puts("Yes");
         }
         return 0;
     }
@@ -28,12 +28,12 @@ int main(){
             }
         }
         if(xo){
-            cout<<"No\n";
+        	puts("No");
         }else{
-            cout<<"Yes\n";
+        	puts("Yes");
         }
     }else{
-        cout<<"Yes\n";
+        puts("Yes");
     }
 
 //the solution by npsc is wrong?(it should be xor == 1 → no)
