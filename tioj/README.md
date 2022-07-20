@@ -6,6 +6,5 @@
 - [ ] 1218
 - [ ] 1502
 - [ ] 1803
-- [ ] 1698 /MST and somekind of modify low function
+- [ ] 1698 /MST and some kind of modify low function
 - [ ] 1399
-- [ ] 1514
