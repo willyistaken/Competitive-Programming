@@ -7,4 +7,3 @@
 - [ ] 1502
 - [ ] 1803
 - [ ] 1698 /MST and some kind of modify low function
-- [ ] 1399
