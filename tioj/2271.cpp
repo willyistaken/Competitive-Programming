@@ -9,7 +9,7 @@ int main(){
 		cin>>arr[i];
 
 	}
-	sort(arr,arr+n);
+	nth_element(arr,arr+(n/2),arr+n);
 	long long sum=0;
 	for(int i=0;i<(n>>1);i++){
 		sum+=arr[i]	;

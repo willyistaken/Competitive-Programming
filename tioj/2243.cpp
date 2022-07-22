@@ -1,9 +1,5 @@
-
-#include <bits/stdc++.h>
-using namespace std;
-#define ll long long
-
-//#include "lib2243.h"
-string enter(){
+#pragma GCC optimize ("O3")
+#include "lib2243.h"
+std::string enter(){
 	return "dzisk";
 }
