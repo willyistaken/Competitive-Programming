@@ -25,6 +25,7 @@ int solve(int l,int r){
 	int maxn=0;
 	for(int i=0;i<r-((r+l)/2);i++){
 		if(rside[i].first-rside[i].second>l) break;
+		int l=-1;int r =((r+l)/2)-l;
 		
 	}
 	//max,min|x
