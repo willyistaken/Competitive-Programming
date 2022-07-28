@@ -11,4 +11,4 @@
 - [ ] 1078
 - [ ] 1643
 - [ ] 1926  //https://sprout.tw/algo2022/ppt_pdf/week04/tp-enumeration_inclass.pdf
-
+- [ ] 1623
