@@ -2,45 +2,36 @@
 using namespace std;
 typedef long long ll;
 
-int n,k,M;
-bool can(int a,int where[],int arr[]){
-	int nowsize =M;
-	int nowk = k;
-	for(int i=0;i<n;i++){
-		if(where[i]<a){
-			if(arr[i]>M) return false;
-			if(arr[i]>nowsize){
-				nowsize=M;
-				nowk--;
-			}
-				nowsize-=arr[i];
-		}
-	}
-	return (nowk>1 ||( nowk==1 && nowsize>=0));
-}
 
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	int n,k,M;
 	cin>>n>>k>>M;	
 	int arr[n];
-	pair<int,int> tobesort[n];
-	for(int i=0;i<n;i++){
-		cin>>arr[i];
-		tobesort[i] = {arr[i],i};
+	for(int i=0;i<n;i++) cin>>arr[i];
+	pair<int,int> dp[n+1];
+	for(int i=1;i<=n;i++) dp[i] = {INT_MAX,INT_MAX};
+	dp[0] = {0,0};
+	for(int j=0;j<n;j++){
+		if(arr[j]>M) continue;
+		for(int i=n;i>=1;i--){
+				pair<int,int> prev = dp[i-1];
+				prev.second+=arr[j];
+				if(prev.second>M){
+					prev.first+=1;
+					prev.second=arr[j];
+				}
+				dp[i] = min(dp[i],prev);
+		}
 	}
-	sort(tobesort,tobesort+n);
-	int where[n];
-	for(int i=0;i<n;i++){
-		where[tobesort[i].second]=i;
+	for(int i=n;i>=0;i--){
+		if(dp[i].first<k){
+			cout<<i<<"\n";
+			return 0;
+		}
 	}
-	int l = 0;int r = n+1;
-	while(r-l>1){
-		int mid = (r+l)/2;
-		if(can(mid,where,arr)) l = mid;
-		else r = mid;
-	}
-	cout<<l<<"\n";
+	
 	return 0;
 }
 
@@ -56,7 +47,7 @@ doesn't work
 try dp
 
 
-
+It is the dp trick used in LIS , which is dp the answer and search for the biggest answer that match the condition
 
 
 
