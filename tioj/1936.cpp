@@ -12,6 +12,14 @@ struct matrix{
             arr.push_back(vector<int>(this->w,0)); 
         }
     }
+	void print(){
+		for(int i=0;i<h;i++){
+			for(int j=0;j<w;j++){
+				cerr<<arr[i][j]<<" ";
+			}
+			cerr<<"\n";
+		}
+	}
 };
 
 matrix operator*(const matrix &a,const matrix &b){
@@ -44,42 +52,61 @@ bool operator==(const matrix &a,const matrix &b){
 }
 int main(){
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    random_device rd;
+    mt19937 gen(rd()); 
+    uniform_int_distribution<> distr((int)-1e2 , (int)1e2);
+	int t;cin>>t;
+	while(t--){
     matrix A;
     matrix B; 
     matrix C; 
     matrix R;
-    int N,M,K;
-    cin>>N>>M>>K;
-    A.h = N; A.w=M; B.h=M; B.w=K; C.h=N;C.w=K; R.w=1;R.h=K;
+	int N;
+    cin>>N;
+	
+    A.h = N; A.w=N; B.h=N; B.w=N; C.h=N;C.w=N; R.w=1;R.h=N;
     A.init();B.init();C.init();R.init();
-    random_device rd;
-    mt19937 gen(rd()); 
-    uniform_int_distribution<> distr(1 , (int)1e7);
-    for(int i=0;i<K;i++){
+	matrix R2;
+	R2.w=1;
+	R2.h=N;
+	R2.init();
+    for(int i=0;i<N;i++){
         R.arr[i][0]=distr(gen);
     }
+	for(int i=0;i<N;i++){
+		R2.arr[i][0]=distr(gen);
+	}
     for(int i=0;i<N;i++){
-        for(int j=0;j<M;j++){
+        for(int j=0;j<N;j++){
             cin>>A.arr[i][j];
         }
     }
-    for(int i=0;i<M;i++){
-        for(int j=0;j<K;j++){
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
             cin>>B.arr[i][j];
         }
     }
     for(int i=0;i<N;i++){
-        for(int j=0;j<K;j++){
+        for(int j=0;j<N;j++){
             cin>>C.arr[i][j];
         }
     }
     matrix one = C*R;
     matrix two = B*R;
     two = A*two;
-    if(one==two){
-        cout<<"Yes\n";
+	matrix one2 = C*R2;
+	matrix two2 = B*R2;
+	two2 = A*two2;
+	//one.print();
+	//two.print();
+    if(one==two && one2==two2 ){
+		cout<<"Loli is god.\n";
     }else{
-        cout<<"No\n";
+		cout<<"QAQ!\n";
     }
+	}
+
+	// randomize algorithm, do two times to avoid overflow and randomness
     return 0;
 }
+

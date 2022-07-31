@@ -9,5 +9,6 @@
 - [ ] 1600 / mobius function
 - [ ] 1078
 - [ ] 1643
-- [ ] 1926  //https://sprout.tw/algo2022/ppt_pdf/week04/tp-enumeration_inclass.pdf
 - [ ] 1594 //catalan number , intense math
+- [ ] 1194
+- [ ] 1192 //2-sat
