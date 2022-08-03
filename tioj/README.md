@@ -12,3 +12,5 @@
 - [ ] 1594 //catalan number , intense math
 - [ ] 1194
 - [ ] 1192 //2-sat
+- [ ] 1582 // cool problem, but annoying
+- [ ] 1808 // math
