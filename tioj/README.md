@@ -14,3 +14,7 @@
 - [ ] 1192 //2-sat
 - [ ] 1582 // cool problem, but annoying
 - [ ] 1808 // math
+- [ ] 1672 // dynamic dsu 
+- [ ] 1205
+- [ ] 1699 // mo's algo
+- [ ] 1694 // mo's algo
