@@ -18,3 +18,4 @@
 - [ ] 1205
 - [ ] 1699 // mo's algo
 - [ ] 1694 // mo's algo
+- [ ] 1725 // hash , than sqrt decomp? can be done in o(nsqrt(n)) 4000ms
