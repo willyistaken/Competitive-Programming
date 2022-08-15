@@ -6,7 +6,7 @@ int a[3636][3636];
 
 int main(){
     int n; cin>>n;
-    int sum=0;
+    long long sum=0;
     for(int i=0;i<n;++i){
         for(int j=0;j<n;++j){
             cin>>a[i][j];
@@ -21,4 +21,4 @@ int main(){
     }
     cout<<sum<<endl;
 }
-// bruh.... you don't need to change anything........ this problem is soooooooo bad....
+// what the fuck... long long pass?
