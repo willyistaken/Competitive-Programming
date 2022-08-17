@@ -5,7 +5,7 @@ typedef long long ll;
 int main(){
 	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 	for(int i=1;i<=100;i++){
-		cout<<i<<" "<<((((i*i-i))/2)%i)<<"\n";
+		cout<<i<<" "<<((i*i*i - 6*i*i +8*i)/24)<<"\n";
 	}
 	return 0;
 }
