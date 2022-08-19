@@ -19,4 +19,3 @@
 - [ ] 2140 // voting algorithm on segment tree beats
 - [ ] 1836 // dynamic 2d segment tree(no lazy tag)
 - [ ] 2062
-- [ ] 2066

@@ -3,6 +3,10 @@
 using namespace std;
 typedef long long ll;
 const int MOD = 1e4+7;
+#include <unistd.h>
+char OB[65536]; int OP;
+inline char RC(){static char buf[65536],*p=buf,*q=buf;return p==q&&(q=(p=buf)+read(0,buf,65536))==buf?-1:*p++;}
+inline int R(){static char c;int a;while((c=RC())<'0');a=c^'0';while((c=RC())>='0')a*=10,a+=c^'0';return a;}
 
 struct matrix{
     int arr[2][2];
@@ -12,14 +16,6 @@ struct matrix{
                 arr[i][j]=0;
                 if(i==j) arr[i][j]=v;
             }
-        }
-    }
-    void print(){
-        for(int i=0;i<2;i++){
-            for(int j=0;j<2;j++){
-                cerr<<arr[i][j]<<" ";
-            }
-            cerr<<"\n";
         }
     }
 };
@@ -68,15 +64,15 @@ int inv(int n){
 
 int main(){
    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    int t;cin>>t;
+    int t;t = R();
     while(t--){
-       int a,b;cin>>a>>b;
+       int a,b;a=R();b=R();
        a++;b++;
         int fa = getf(a);
         int fb = getf(b);
         int fgcd = getf(__gcd(a,b));
         int invf = inv(fgcd);
-        cout<<(2LL*fa*fb*invf)%MOD<<"\n";
+        printf("%lld\n",(2LL*fa*fb*invf)%MOD);
     }
 
 

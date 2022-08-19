@@ -85,7 +85,14 @@ const int MAXN = 1e7+2;
 short d[MAXN];
 char num[MAXN];
 vector<short> prime;
+
+#include <unistd.h>
+char OB[65536]; int OP;
+inline char RC(){static char buf[65536],*p=buf,*q=buf;return p==q&&(q=(p=buf)+read(0,buf,65536))==buf?-1:*p++;}
+inline int R(){static char c;int a;while((c=RC())<'0');a=c^'0';while((c=RC())>='0')a*=10,a+=c^'0';return a;}
+
 void init(){
+
 	d[1]=1;
 	num[1]=1;
 	for(int i=2;i<MAXN;i++){
@@ -110,12 +117,11 @@ void init(){
 
 
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	init();
-	int t;cin>>t;
+	int t;t=R();
 	while(t--){
-		int n;cin>>n;
-		cout<<d[n]<<"\n";
+		int n = R();
+		printf("%d\n",d[n]);
 	}
 	return 0;
 }
