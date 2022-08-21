@@ -1,12 +1,15 @@
-#include<bits/stdc++.h>
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-
+#include <unistd.h>
+inline char RC(){static char buf[65536],*p=buf,*q=buf;return p==q&&(q=(p=buf)+read(0,buf,65536))==buf?-1:*p++;}
+inline int R(){static char c;int a;while((c=RC())<'0');a=c^'0';while((c=RC())>='0')a*=10,a+=c^'0';return a;}
 
 bitset<250010> taken;
 int main(){
 	taken.reset();
-	int n,m,k;cin>>n>>m>>k;
+	int n,m,k;n = R();m = R();k = R();
 	vector<int> loop(n*n+1,0);
 	int t=0;
 	for(int i=1;i<=n*n;i++){
@@ -31,7 +34,7 @@ int main(){
 	for(int i=0;i<k;i++){
 		m = loop[m];
 	}
-	cout<<m<<"\n";
+	printf("%d\n",m);
 	return 0;
 }
 

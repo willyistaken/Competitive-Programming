@@ -2,10 +2,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef unsigned long long ull;
 int main(){
 	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-	for(int i=1;i<=100;i++){
-		cout<<i<<" "<<((i*i*i - 6*i*i +8*i)/24)<<"\n";
+	ull n;
+	while(true){
+		cin>>n;
+		assert(n!=ULONG_LONG_MAX);
+		if(n==0) break;
 	}
+	cout<<0<<"\n";
 	return 0;
 }
