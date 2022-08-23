@@ -15,7 +15,6 @@
 - [ ] 1672 // dynamic dsu using pbds fast hashmap , or just use offline and coordinate compression?
 - [ ] 1205
 - [ ] 1725 // hash , than sqrt decomp? can be done in o(nsqrt(n)) 4000ms
-- [ ] 1841 // bit tree and some properties?
 - [ ] 2140 // voting algorithm on segment tree beats
 - [ ] 1836 // dynamic 2d segment tree(no lazy tag)
 - [ ] 1281 // suffix array
