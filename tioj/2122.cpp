@@ -53,7 +53,7 @@ int main(){
 		cin>>a[i].l>>a[i].r;
 		a[i].t=i;
 	}
-	int B = sqrt(n);
+	int B = max((int)(n/(int)sqrt(Q)),1);
 	sort(a,a+Q,[&](const query &a,const query &b){return (((a.l/B)==(b.l/B))?(a.r<b.r):(a.l<b.l));});
 	for(int i=0;i<Q;i++){
 		go(a[i].l,a[i].r);

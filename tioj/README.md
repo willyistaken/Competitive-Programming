@@ -2,8 +2,6 @@
 
 # TO DO LIST
 - [ ] 2121 //newton's identity
-- [ ] 2232 //floyd-warshall
-- [ ] 1218
 - [ ] 1502
 - [ ] 1698 //model a graph and find bridge
 - [ ] 1078
@@ -18,3 +16,5 @@
 - [ ] 2140 // voting algorithm on segment tree beats
 - [ ] 1836 // dynamic 2d segment tree(no lazy tag)
 - [ ] 1281 // suffix array
+- [ ] 1241 //some cool dp? emunerate the second to last Factor and compute(but how to compute)
+- [ ] 2116 // matrix dp&math

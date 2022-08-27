@@ -86,7 +86,7 @@ int main(){
         cin>>a[i].l>>a[i].r;
         a[i].t=i;
     }
-    int B = sqrt(n);
+    int B = n/sqrt(Q);
     sort(a,a+Q,[&](const query &a,const query &b){return (((a.l/B)==(b.l/B))?(a.r<b.r):(a.l<b.l));});
     for(int i=0;i<Q;i++){
         if(a[i].l==a[i].r) {
