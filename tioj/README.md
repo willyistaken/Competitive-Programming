@@ -15,6 +15,5 @@
 - [ ] 1725 // hash , than sqrt decomp? can be done in o(nsqrt(n)) 4000ms
 - [ ] 2140 // voting algorithm on segment tree beats
 - [ ] 1836 // dynamic 2d segment tree(no lazy tag)
-- [ ] 1281 // suffix array
 - [ ] 1241 //some cool dp? emunerate the second to last Factor and compute(but how to compute)
 - [ ] 2116 // matrix dp&math

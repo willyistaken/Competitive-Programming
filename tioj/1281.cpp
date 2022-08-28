@@ -9,14 +9,10 @@ struct st{
 
 
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n;cin>>n;
-	cin.ignore();
-	string s;
-	getline(cin,s);
-	s+='$';
-	n++;
-	assert(s.size()==n);
+	char s[100005];
+	scanf("%s",s);
+	s[strlen(s)]='$';
+	int n = strlen(s);
 	int sfa[n]={0};
 	st temp[n];
 	for(int i=0;i<n;i++){
@@ -51,7 +47,14 @@ int main(){
 	for(int i=1;i<n;i++){
 		ans = max(lcp[i],ans);
 	}
-	cout<<ans<<"\n";
-
+	for(int i=1;i<n;i++){
+		if(lcp[i]==ans){
+			for(int j=0;j<ans;j++){
+				putchar(s[temp[i].id+j]);
+			}
+			return 0;
+		}
+	}
 	return 0;
 }
+
