@@ -17,3 +17,4 @@
 - [ ] 1836 // dynamic 2d segment tree(no lazy tag)
 - [ ] 1241 //some cool dp? emunerate the second to last Factor and compute(but how to compute)
 - [ ] 2116 // matrix dp&math
+- [ ] 1934 //krap's algorithm with scc

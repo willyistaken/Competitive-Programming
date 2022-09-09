@@ -8,10 +8,19 @@ int main(){
 	srand( time(NULL) );
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	int n = rand()%100+5;
-	int m = rand()%100+5;
-	cout<<n<<" "<<m<<"\n";	
-	for(int i=0;i<m;i++){
-		cout<<rand()%n + 1<<" "<<rand()%n + 1<<" "<<((rand()%2)?(-1):(1))*(rand()%11)<<"\n";
+	int k = rand()%10000;
+	cout<<n<<" "<<k<<"\n";	
+	int arr[n];
+	for(int i=0;i<n;i++) arr[i] = i+1;
+	random_shuffle(arr,arr+n);
+	for(int i=0;i<n;i++) cout<<arr[i]<<" ";
+	cout<<"\n";
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			int m = (rand()%2)?(1):(-1);
+			cout<<m*rand()%1000<<" ";
+		}
+		cout<<"\n";
 	}
 	return 0;
 }

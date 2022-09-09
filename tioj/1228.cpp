@@ -16,7 +16,7 @@ const int MAXN = 1e6+2;
 int n,q;
 node arr[MAXN];
 vector<pair<int,int> >  side[MAXN];
-bitset<MAXN> beingchild;
+bool beingchild[MAXN];
 int t;
 struct fenwick{
 	int a[MAXN];	
@@ -51,7 +51,6 @@ void dfs(int r){
 
 int main(){
 	scanf("%d %d",&n,&q);
-	beingchild.reset();
 	for(int i=0;i<n-1;i++){
 		int a,b,m;
 		scanf("%d %d %d",&a,&b,&m);

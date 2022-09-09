@@ -1,3 +1,5 @@
+#pragma GCC optimize("Ofast,unroll-loops,no-stack-protector,fast-math")
+#pragma GCC optimize("O3")
 #include<bits/stdc++.h>
 #include "lib1926.h"
 using namespace std;
@@ -7,7 +9,7 @@ pair<ll,ll> mn(pair<ll,ll> a,pair<ll,ll> b){
 	if(Oshietekudasai(a.first,a.second,b.first,b.second)) return a;
 	else return b;
 }
-bool smaller(pair<ll,ll> a,pair<ll,ll> b){
+inline bool smaller(pair<ll,ll> a,pair<ll,ll> b){
 	return(Oshietekudasai(a.first,a.second,b.first,b.second)); 
 }
 
@@ -39,7 +41,6 @@ void find(ll l,ll r){
 		}
 }
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	Init(&n,&m);
 	find(0,m);
 	return 0;
