@@ -18,7 +18,8 @@ void init(){
 
 int main(){
 	init();
-	short r,c;scanf("%hu %hu",&r,&c);
+	short r,c;
+	scanf("%hu %hu",&r,&c);
 	printf("%lld\n",p[r][c]);
 	return 0;
 }
