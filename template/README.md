@@ -11,7 +11,6 @@ syntax on
 :set nu
 :set relativenumber
 :set guicursor=
-colorscheme nord
 
 :inoremap ( ()<Esc>i
 :inoremap ' ''<Esc>i
