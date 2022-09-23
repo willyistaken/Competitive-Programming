@@ -16,4 +16,6 @@
 - [ ] 1241 //some cool dp? emunerate the second to last Factor and compute(but how to compute)
 - [ ] 2116 // matrix dp&math
 - [ ] 1934 //krap's algorithm with scc
-- [ ] 1397 // consider recursion owo pwp qwq uwu nwn bwb dwd TwT 
+- [ ] 2027 // monotone
+- [ ] 1723 // sa , binary search , RMQ
+- [ ] 1244 // dp
