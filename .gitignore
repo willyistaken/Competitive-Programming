@@ -14,7 +14,7 @@
 .vscode/tasks.json
 *.exe
 *.out
+*.swp
 lib*.h
 ojdl/test*
-*.swp
 */tempCodeRunnerFile.cpp
