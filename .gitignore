@@ -16,5 +16,5 @@
 *.out
 lib*.h
 ojdl/test*
-
+*.swp
 */tempCodeRunnerFile.cpp
