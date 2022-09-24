@@ -15,5 +15,6 @@
 *.exe
 *.out
 lib*.h
+ojdl/test*
 
 */tempCodeRunnerFile.cpp
