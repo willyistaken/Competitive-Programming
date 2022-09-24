@@ -15,6 +15,7 @@
 *.exe
 *.out
 *.swp
+*.swo
 lib*.h
 ojdl/test*
 */tempCodeRunnerFile.cpp
