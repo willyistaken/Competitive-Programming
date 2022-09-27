@@ -87,3 +87,4 @@ int main(){
 
 
 //flatten the tree: the kind where you only mark in time(sum),  if you wants to cancel out the effect of subtree: use in and out marking;
+
