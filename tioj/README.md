@@ -18,4 +18,3 @@
 - [ ] 1934 //krap's algorithm with scc
 - [ ] 2027 // dc , trie
 - [ ] 1723 // sa , binary search , RMQ
-- [ ] 1244 // dp
