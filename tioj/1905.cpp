@@ -1,86 +1,129 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-int n,k;
-struct node{
-	ll mx[2];
-	ll mn[2];
-	void init(){
-		mx[0]=-1;mx[1]=-1;
-		mn[0]=LONG_LONG_MAX;mn[1]=LONG_LONG_MAX;
+//#include<bits/extc++.h>
+//__gnu_pbds::
+#include <unistd.h>
+inline char RC(){static char buf[65536],*p=buf,*q=buf;return p==q&&(q=(p=buf)+read(0,buf,65536))==buf?-1:*p++;}
+inline int R(){
+	int ans = 0; char c = RC(); bool minus = false;
+	while((c < '0' or c > '9') and c != '-' and c != EOF) c = RC();
+	if(c == '-') minus = true, c = RC();
+	while(c >= '0' and c <= '9') ans = ans * 10 + (c ^ '0'), c = RC();
+	return minus ? -ans : ans;
+}
+const int S = 1e5;
+char outbuf[S]; int outp;
+inline void W(int n){
+	static char buf[12], p;
+	if(n == 0) outbuf[outp++] = '0';
+	p = 0;
+	if(n < 0){
+		outbuf[outp++] = '-';
+		while(n) buf[p++] = '0' - (n % 10), n /= 10;
+	} else {
+		while(n) buf[p++] = '0' + (n % 10), n /= 10;
 	}
-	void print(){
-		cout<<"MAX:"<<mx[0]<<" "<<mx[1]<<"\n";
-		cout<<"MIN:"<<mn[0]<<" "<<mn[1]<<"\n";
+	for(--p; p >= 0; --p) outbuf[outp++] = buf[p];
+	outbuf[outp++] = '\n';
+	if(outp > S-12) fwrite(outbuf, 1, outp, stdout), outp = 0;
+}
+
+int n,k,f;
+vector<int> arr;
+vector<int> d;
+
+struct seg{
+	vector<int> arr;
+	int s;
+	void init(int g){
+		s = g;
+		arr.resize(2*s,INT_MAX);
+	}
+
+	void modify(int ind,int v){
+		ind+=s;
+		arr[ind]=min(arr[ind],v);
+		ind>>=1;
+		while(ind){
+			arr[ind] = min(arr[2*ind],arr[2*ind+1]);
+			ind>>=1;
+		}
+	}
+	
+	int query(int l,int r){
+		int ans = INT_MAX;
+		l+=s;r+=s;
+		while(l<r){
+			if(l&1) ans = min(ans,arr[l++]);
+			if(r&1) ans = min(ans,arr[--r]);
+			l>>=1;r>>=1;
+		}
+		return ans;
 	}
 };
 
-node combine(const node a,const node b){
-		node r;
-		r.init();
-		int ahead=0;
-		int bhead=0;
-		for(int i=0;i<2;i++){
-			if(a.mx[ahead]>=b.mx[bhead]) r.mx[i] = a.mx[ahead++];	
-			else	r.mx[i] = b.mx[bhead++];	
-		}
-		ahead=0;
-		bhead=0;
-		for(int i=0;i<2;i++){
-			if(a.mn[ahead]<=b.mn[bhead]) r.mn[i] = a.mn[ahead++];	
-			else	r.mn[i] = b.mn[bhead++];	
-		}
-		return r;
-}
-vector<node> segtree;
+struct Q{
+	int l,r;
+	int id;
+	int ans;
+};
 
-void init(){
-	segtree.resize(2*n);
-	for(int i=0;i<k;i++){
-		ll a;cin>>a;
-		segtree[i+n].mx[0]=a;
-		segtree[i+n].mx[1]=-1;
-		segtree[i+n].mn[0]=a;
-		segtree[i+n].mn[1]=LONG_LONG_MAX;
-	}
-	for(int i=n-1;i>=1;i--){
-		segtree[i] = combine(segtree[2*i],segtree[2*i+1]);
-	}
+int getid(int v){
+	return lower_bound(d.begin(),d.end(),v)-d.begin();
 }
 
-ll query(int l,int r){
-	node result;
-	result.init();
-	l+=n;r+=n;
-	while(l<r){
-		if(l%2) result = combine(result,segtree[l++]);
-		if(r%2) result = combine(result,segtree[--r]);
-		l>>=1;r>>=1;
-	}
-	return min(result.mx[0]-result.mx[1],result.mn[1]-result.mn[0]);
-}
-int np2(int _n);
 int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	cin>>n;
-	k = n;
-	n = np2(n);
-	init();
-	int q;cin>>q;
-	while(q--){
-		int l,r;cin>>l>>r;
-		l--;
-		cout<<query(l,r)<<"\n";
+	//ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	n = R();
+	arr.resize(n);
+	for(int i=0;i<n;i++) arr[i] = R();
+	d = arr;
+	sort(d.begin(),d.end());
+	d.resize(unique(d.begin(),d.end())-d.begin());
+	f = R();
+	Q q[f];
+	for(int i=0;i<f;i++){
+		cin>>q[i].l>>q[i].r;
+		q[i].l--;q[i].r--;
+		q[i].id = i;
 	}
-	return 0;
-}
+	sort(q,q+f,[](const Q &a,const Q &b){return a.r<b.r;});
+	
+	seg mindis;mindis.init(n);
+	seg update;update.init(d.size());
+	update.modify(getid(arr[0]),-0);	
+	int qhead=0;
+	for(int i=1;i<n;i++){
+		// smaller side
+		int c=0;
+		int u;
+		while(arr[i]-c>1 && (u = update.query(getid(c),getid(arr[i])+1) )<=0){
+			u = -u;
+			mindis.modify(u,arr[i]-arr[u]);
+			c = (arr[u]+((arr[i]-arr[u])/2))+((arr[i]-arr[u])&1);
+		}
+		// larger side
+		c = INT_MAX;
+		while( c-arr[i]>1 &&(u = update.query(getid(arr[i]),getid(c)))<=0){
+			u = -u;
+			mindis.modify(u,arr[u]-arr[i]);
+			c = (arr[i]+((arr[u]-arr[i])/2));
+		}
+		
+		// update
+		update.modify(getid(arr[i]),-i);
+		// getans 
+		while(qhead<f && q[qhead].r==i){
+			q[qhead].ans = mindis.query(q[qhead].l,q[qhead].r);
+			qhead++;
+		}
+	}
+	sort(q,q+f,[](const Q &a,const Q &b){return a.id<b.id;});
+	for(int i=0;i<f;i++){
+		W(q[i].ans);
+	}
+	fwrite(outbuf, 1, outp, stdout);
 
-int np2(int _n){
-	_n--;
-	_n |= _n>>1;
-	_n |= _n>>2;
-	_n |= _n>>4;
-	_n |= _n>>8;
-	_n |= _n>>16;
-	return _n++;
+
 }
