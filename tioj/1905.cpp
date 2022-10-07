@@ -1,37 +1,10 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-//#include<bits/extc++.h>
-//__gnu_pbds::
-#include <unistd.h>
-inline char RC(){static char buf[65536],*p=buf,*q=buf;return p==q&&(q=(p=buf)+read(0,buf,65536))==buf?-1:*p++;}
-inline int R(){
-	int ans = 0; char c = RC(); bool minus = false;
-	while((c < '0' or c > '9') and c != '-' and c != EOF) c = RC();
-	if(c == '-') minus = true, c = RC();
-	while(c >= '0' and c <= '9') ans = ans * 10 + (c ^ '0'), c = RC();
-	return minus ? -ans : ans;
-}
-const int S = 1e5;
-char outbuf[S]; int outp;
-inline void W(int n){
-	static char buf[12], p;
-	if(n == 0) outbuf[outp++] = '0';
-	p = 0;
-	if(n < 0){
-		outbuf[outp++] = '-';
-		while(n) buf[p++] = '0' - (n % 10), n /= 10;
-	} else {
-		while(n) buf[p++] = '0' + (n % 10), n /= 10;
-	}
-	for(--p; p >= 0; --p) outbuf[outp++] = buf[p];
-	outbuf[outp++] = '\n';
-	if(outp > S-12) fwrite(outbuf, 1, outp, stdout), outp = 0;
-}
 
 int n,k,f;
-vector<int> arr;
-vector<int> d;
+vector<int> arr(100005);
+vector<int> d(100005);
 
 struct seg{
 	vector<int> arr;
@@ -74,14 +47,15 @@ int getid(int v){
 }
 
 int main(){
-	//ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-	n = R();
-	arr.resize(n);
-	for(int i=0;i<n;i++) arr[i] = R();
-	d = arr;
+	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	cin>>n;
+	for(int i=0;i<n;i++){
+		cin>>arr[i];
+		d[i] = arr[i];
+	}
 	sort(d.begin(),d.end());
 	d.resize(unique(d.begin(),d.end())-d.begin());
-	f = R();
+	cin>>f;
 	Q q[f];
 	for(int i=0;i<f;i++){
 		cin>>q[i].l>>q[i].r;
@@ -121,9 +95,9 @@ int main(){
 	}
 	sort(q,q+f,[](const Q &a,const Q &b){return a.id<b.id;});
 	for(int i=0;i<f;i++){
-		W(q[i].ans);
+		cout<<q[i].ans<<"\n";
 	}
-	fwrite(outbuf, 1, outp, stdout);
+
 
 
 }
