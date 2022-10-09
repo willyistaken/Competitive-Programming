@@ -17,3 +17,5 @@
 - [ ] 2027 // dc , trie
 - [ ] 1723 // sa , binary search , RMQ
 - [ ] 2183 // binary search for max and min slope
+- [ ] 2214
+- [ ] 1695

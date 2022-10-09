@@ -46,10 +46,8 @@ int main() {
         int dp[m][k+1];;
         memset(dp,0,sizeof(dp));
         dp[0][0]=1;
-
-        int C[k+1]= {0};
+        int C[k+1] = {0};
         getChoose(C);
-
         for(int r=0; r<m; r++) {
 
             for(int h = k; h>=1; h--) {
@@ -80,3 +78,4 @@ int main() {
 
     return 0;
 }
+
