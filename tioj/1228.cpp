@@ -1,91 +1,92 @@
-#include<vector>
-#include<algorithm>
-#include<cstdio>
-#include<cstring>
-#include<bitset>
-#include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+//#include<bits/extc++.h>
+//__gnu_pbds::
+#include <unistd.h>
+inline char RC(){static char buf[65536],*p=buf,*q=buf;return p==q&&(q=(p=buf)+read(0,buf,65536))==buf?-1:*p++;}
+inline int R(){
+	int ans = 0; char c = RC(); bool minus = false;
+	while((c < '0' or c > '9') and c != '-' and c != EOF) c = RC();
+	if(c == '-') minus = true, c = RC();
+	while(c >= '0' and c <= '9') ans = ans * 10 + (c ^ '0'), c = RC();
+	return minus ? -ans : ans;
+}
 
 
-struct node{
-	int time=0; 
-	int submax=0;
-};
-const int MAXN = 1e6+2;
 int n,q;
-node arr[MAXN];
-vector<pair<int,int> >  side[MAXN];
-bool beingchild[MAXN];
-int t;
-struct fenwick{
-	int a[MAXN];	
-	void init(){
-		memset(a,0,sizeof(a));
+const int MAXN = 1000005;
+struct e{
+	int prev;
+	int to;
+};
+
+pair<int,int> seq[MAXN];
+e edge[MAXN];
+int ee[MAXN];
+int w[MAXN];
+struct bit{
+	int arr[MAXN];
+	int s;
+	void init(int k){
+		s = k;
 	}
+	int query(int ind){
+		int r = 0;
+		while(ind){
+			r+=arr[ind];
+			ind -= (ind & -ind);
+		}
+		return r;
+	}
+
 	void add(int ind,int v){
-		while(ind<=n){
-			a[ind]+=v;
+		while(ind<=s){
+			arr[ind]+=v;
 			ind += (ind & -ind);
 		}
 	}
-	int query(int ind){
-		int result=0;
-		while(ind){
-			result+=a[ind];
-			ind -=(ind & -ind);
-		}
-		return result;
-	}
-} bit;
+} fwk;
+int t;
 void dfs(int r){
-	arr[r].time=++t;			
-	for(auto i : side[r]){
-		if(!arr[i.first].time){
-			dfs(i.first);
-			bit.add(arr[i.first].time,i.second);
-		}
+	seq[r].first = ++t;
+	for(int p = ee[r];p!=-1;p = edge[p].prev){
+		dfs(edge[p].to);
 	}
-	arr[r].submax = t;
+	fwk.add(seq[r].first,w[r]);
+	seq[r].second = t;
 }
 
 int main(){
-	scanf("%d %d",&n,&q);
+	n = R();q = R();
+	fill(ee,ee+MAXN,-1);
 	for(int i=0;i<n-1;i++){
-		int a,b,m;
-		scanf("%d %d %d",&a,&b,&m);
-		side[a].push_back({b,m});
-		beingchild[b]=1;
+		int a = R();int b = R();int m = R();
+		edge[i].prev = ee[a];
+		ee[a] = i;
+		edge[i].to = b;
+		w[b]=m;
 	}
-	bit.init();
-	for(int i=0;i<n;i++){
-		if(!beingchild[i]){
-			dfs(i);
-		}
-	}
+	fwk.init(n);
+	dfs(0);
+	/*for(int i=0;i<n;i++){
+		cout<<i<<":"<<fwk.query(seq[i].second)-fwk.query(seq[i].first)<<"\n";
+	}*/
+	
 	while(q--){
-		int type;scanf("%d",&type);
+		int type = R();
 		if(type){
-			int d;scanf("%d",&d);
-			int ans;
-			ans = bit.query(arr[d].submax)-bit.query(arr[d].time);
-			printf("%d\n",2*ans);
+			int r= R();
+			printf("%d\n",2*(fwk.query(seq[r].second)-fwk.query(seq[r].first)));
 		}else{
-			int d;int v;
-			scanf("%d %d",&d,&v);
-			int ind = arr[d].time;
-			int og = bit.query(arr[d].time)-bit.query(arr[d].time-1);
-			bit.add(ind,-og);
-			bit.add(ind,v);
+			int d=R();int m = R();
+			fwk.add(seq[d].first,-w[d]);
+			fwk.add(seq[d].first,m);
+			w[d]=m;
 		}
 	}
+	
 	return 0;
 }
 
-
-
-
-
-//flatten the tree: the kind where you only mark in time(sum),  if you wants to cancel out the effect of subtree: use in and out marking;
-
-//try using adj link list
+// very very optimize
