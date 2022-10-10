@@ -9,7 +9,7 @@ typedef long long int ll;
 #define MOD 1000000007
 
 // Maximum Number Of Nodes
-#define MAXNODE 10;
+#define MAXNODE 100;
 
 // Maximum Number Of testCases
 #define MAXT 10;
@@ -17,7 +17,7 @@ typedef long long int ll;
 // Maximum weight
 #define MAXWEIGHT 100;
 
-#define MAXEDGE 20;
+#define MAXEDGE 10001;
 // Function for the path
 // compression technique
 ll find(ll parent[], ll x)
@@ -84,6 +84,7 @@ void generate()
 					}
 				}
 		}
+		/*
 		int q =  5+rand()%10;
 		cout<<q<<"\n";
 		while(q--){
@@ -91,6 +92,7 @@ void generate()
 			int b = rand()%n+1;
 			cout<<a<<" "<<b<<"\n";
 		}
+		*/
 }
 
 // Driver Code

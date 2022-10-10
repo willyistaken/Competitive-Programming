@@ -1,109 +1,100 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <bitset>
+#include <queue>
+#include <vector>
+#define lld long long
+#define PB push_back
+#define F first
+#define S second
+#define jizz cin.tie(0);ios_base::sync_with_stdio(0);
+#define endl '\n'
 using namespace std;
-const int maxn=30000+10 ;
-struct P
-{
-    int from,to,dis;
-    bool operator < (const P &rhs) const
-    {
-        return dis<rhs.dis ;
+typedef pair<int,lld> Pair;
+struct Edge{
+    int from,to;
+    lld w;
+    bool operator<(const Edge &x)const{
+        return w < x.w;
     }
-};
-struct Q{int to,dis;};
- 
-int fa[maxn] ;
-int getfa(int x)
-{
-    return fa[x]==x ? x : fa[x]=getfa(fa[x]) ;
+}E[500005];
+struct DJS{
+    int p[1005];
+    void init(){for(int i = 0 ; i < 1005; i++)p[i] = i;}
+    int query(int x){return p[x] == x?x:p[x] = query(p[x]);}
+    void unite(int x,int y){
+        x = query(x);
+        y = query(y);
+        p[x] = y;
+    }
+    bool same(int x,int y){return query(x) == query(y);}
+}djs;
+lld mst,smst;
+vector<Pair> v[1005];
+lld p[1005][12],mx[1005][12];
+int in[1005],out[1005],t;
+bool isfa(int a,int b){return in[a] <= in[b] && out[a] >= out[b];}
+void DFS(int now,int fa,lld l){
+    in[now] = ++t;
+    p[now][0] = fa;
+    mx[now][0] = l;
+    for(int i = 1 ;i < 12 ; i++){
+        p[now][i] = p[p[now][i-1]][i-1];
+        mx[now][i] = max(mx[now][i-1],mx[p[now][i-1]][i-1]);
+    }
+    for(Pair i : v[now]){
+        if(i.F != fa)DFS(i.F,now,i.S);
+    }
+    out[now] = ++t;
 }
- 
-vector<Q> v[maxn] ;
-int n,dep[maxn] ;
-int anc[17][maxn],ancdis[17][maxn] ;
- 
-void dfs(int x,int f,int d)
-{
-    dep[x]=d ;
-    for(auto i : v[x]) if(i.to!=f)
-    {
-        anc[0][i.to]=x ;
-        ancdis[0][i.to]=i.dis ;
-        dfs(i.to,x,d+1) ;
+lld LCA(int a,int b){
+    lld maxx = 0;
+    if(a == b)return 0;
+    if(isfa(b,a))swap(a,b);
+    if(!isfa(a,b)){
+        for(int i = 11; i >= 0 ; i--){
+            if(!isfa(p[a][i],b)){
+                maxx = max(maxx,mx[a][i]);
+                a = p[a][i];
+            }
+        }
+        maxx = max(maxx,mx[a][0]);
+        a = p[a][0];
     }
+    for(int i = 11; i >= 0 ; i--){
+        if(!isfa(p[b][i],a)){
+            maxx = max(maxx,mx[b][i]);
+            b = p[b][i];
+        }
+    }
+    return max(maxx,mx[b][0]);
 }
- 
-void build_LCA()
-{
-    memset(anc[0],-1,sizeof(anc[0])) ;
-    for(int i=1;i<=n;i++) if(anc[0][i]==-1)
-    {
-        anc[0][i]=i ;
-        ancdis[0][i]=0 ;
-        dfs(i,i,0) ;
+int main(){jizz
+    out[0] = 2147483647;
+    djs.init();
+    int n,m;cin >> n >> m ;
+    for(int i = 0 ; i < m ; i++)
+        cin >> E[i].from >> E[i].to >> E[i].w;
+    sort(E,E+m);
+    queue<int> q;
+    int count = 0;
+    for(int i = 0 ; i < m ; i++){
+        if(!djs.same(E[i].from,E[i].to)){
+            djs.unite(E[i].from,E[i].to);
+            v[E[i].from].PB({E[i].to,E[i].w});
+            v[E[i].to].PB({E[i].from,E[i].w});
+            mst += E[i].w; 
+            count++;
+        }else q.push(i);
     }
-    for(int i=1;(1<<i)<=n;i++) for(int j=1;j<=n;j++)
-        anc[i][j]=anc[i-1][anc[i-1][j]] ,
-        ancdis[i][j]=max(ancdis[i-1][j],ancdis[i-1][anc[i-1][j]]) ;
-}
- 
-void query_fa(int x,int num,int &ans,int &dis)
-{
-    if(!num) { ans=x ; dis=0 ; return ; }
-    dis=0 ;
-    for(int i=16;i>=0 && num;i--) if(num&(1<<i))
-        dis=max(dis,ancdis[i][x]) , x=anc[i][x] ,
-        num^=(1<<i) ;
-    ans=x ;
-}
- 
-int LCA(int x,int y)
-{
-    if(x==y) return 0 ;
-    if(dep[x]>dep[y])
-    {
-        int f,d ;
-        query_fa(x,dep[x]-dep[y],f,d) ;
-        return max(d,LCA(f,y)) ;
+    if(count != n-1)return cout << "-1 -1" << endl ,0;  
+    smst = (1LL << 62);
+    DFS(1,0,0);
+    while(!q.empty()){
+        int tmp = q.front();q.pop();
+        smst = min(smst,mst-LCA(E[tmp].from,E[tmp].to)+E[tmp].w);
     }
-    if(dep[x]<dep[y])
-    {
-        int f,d ;
-        query_fa(y,dep[y]-dep[x],f,d) ;
-        return max(d,LCA(x,f)) ;
-    }
-    int ret=0 ;
-    for(int i=15;i>=0;i--) if(anc[i][x]!=anc[i][y])
-        ret=max(ret,max(ancdis[i][x],ancdis[i][y])) ,
-        x=anc[i][x] , y=anc[i][y] ;
-    return max(ret,max(ancdis[0][x],ancdis[0][y])) ;
-}
- 
-vector<P> edge ;
-int main()
-{
-    int m ; scanf("%d%d",&n,&m) ;
-    while(m--)
-    {
-        int x,y,dis ; scanf("%d%d%d",&x,&y,&dis) ;
-        edge.push_back((P){x,y,dis}) ;
-    }
-    sort(edge.begin(),edge.end()) ;
-    for(int i=1;i<=n;i++) fa[i]=i ;
-    for(auto i : edge)
-    {
-        int x=getfa(i.from) , y=getfa(i.to) ;
-        if(x==y) continue ;
-        fa[x]=y ;
-        v[i.from].push_back((Q){i.to,i.dis}) ;
-        v[i.to].push_back((Q){i.from,i.dis}) ;
-    }
- 
-    build_LCA() ;
-    int Q ; scanf("%d",&Q) ;
-    while(Q--)
-    {
-        int x,y ; scanf("%d%d",&x,&y) ;
-        if(getfa(x)!=getfa(y)) printf("-1\n") ;
-        else printf("%d\n",LCA(x,y)) ;
-    }
+    cout << mst << ' ' << (smst == (1LL << 62) ? -1:smst ) << endl;
+    return 0;
 }
