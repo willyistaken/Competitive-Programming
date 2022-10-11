@@ -3,251 +3,87 @@ using namespace std;
 typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds::
-
-
-
-
-int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	const int N = 5;
-	int arr[N][N]={{0}};
-	for(int i=0;i<N;i++) arr[i][i]=1;	
-	const int T = 30;
-	for(int i=1;i<=T;i++) cout<<__lg((i & -i))+1;
-	cout<<"\n";
-	for(int i=1;i<=T;i++){
-		if(__lg((i & -i))+1>=N) {
-			cout<<i<<"\n";
-			continue;
-		}
-		for(int k=0;k<N;k++){
-			arr[__lg((i & -i))+1][k]+=arr[__lg((i & -i))][k];
-		}
-		cout<<i<<":"<<__lg(i & -i)+1<<"\n";
-		for(int i=0;i<N;i++){
-				for(int j=0;j<N;j++) cout<<arr[i][j]<<"|";
-				cout<<"\n";
+int n;
+const int MOD = 1e9+7;
+struct matrix{
+	vector<vector<int> > arr;
+	matrix(): arr(vector<vector<int>>(n+1, vector<int>(n+1,0))){}
+	void print(){
+		for(int i=0;i<=n;i++){
+			for(int j=0;j<=n;j++) cout<<arr[i][j]<<" ";
+			cout<<"\n";
 		}
 		cout<<"\n";
 	}
+		
+};
 
+matrix mul(const matrix &a,const matrix &b){
+	matrix result;
+	for(int i=0;i<=n;i++){
+		for(int j=0;j<=i;j++){
+			for(int k=0;k<=i;k++){
+				result.arr[i][j] += (1LL*a.arr[k][j]*b.arr[i][k])%MOD;
+				result.arr[i][j] = (result.arr[i][j]>MOD)?(result.arr[i][j]-MOD):(result.arr[i][j]);
+			}
+		}
+	}
+
+	return result;
+}
+
+int main() {
+    ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	cin>>n;
+	ll t;cin>>t;
+	int MAXC = __lg(t)+3;
+	matrix pow2[MAXC];
+	for(int i=0;i<=n;i++){
+		pow2[0].arr[i][i]=1;
+	}
+	pow2[1] = pow2[0];
+	pow2[1].arr[1][0]=1;
+	matrix cur = mul(pow2[1],pow2[0]);
+	for(int i=2;i<MAXC;i++){
+		pow2[i] = cur;
+		if(i<=n){
+			for(int k=0;k<=n;k++){
+				pow2[i].arr[i][k]+=pow2[i].arr[i-1][k];
+				pow2[i].arr[i][k] = (pow2[i].arr[i][k]>MOD)?(pow2[i].arr[i][k]-MOD):(pow2[i].arr[i][k]);
+			}
+		}
+		cur = mul(pow2[i],cur);
+	}
+	matrix result = pow2[0];
+	for(int i=MAXC-1;i>=0;i--){
+		if((t>>i)&1){
+			result = mul(result,pow2[i+1]);
+		}
+	}
+	//result.print();
+	int arr[n+1];
+	for(int i=1;i<=n;i++) cin>>arr[i];
+	arr[0]=1;
+	for(int i=1;i<=n;i++){
+		ll ans=0;
+		for(int k=0;k<=n;k++){
+			ans+=(1LL*result.arr[i][k]*arr[k])%MOD;
+			ans = (ans>MOD)?(ans-MOD):(ans);
+		}
+		cout<<ans<<" ";
+	}
+	cout<<"\n";
 	return 0;
 }
 
 
 
 /*Observation:
-1|0|0|0|0|
-1|1|0|0|0|
-0|0|1|0|0|
-0|0|0|1|0|
-0|0|0|0|1|
-
-2:2
-1|0|0|0|0|
-1|1|0|0|0|
-1|1|1|0|0|
-0|0|0|1|0|
-0|0|0|0|1|
-
-3:1
-1|0|0|0|0|
-2|1|0|0|0|
-1|1|1|0|0|
-0|0|0|1|0|
-0|0|0|0|1|
-
-4:3
-1|0|0|0|0|
-2|1|0|0|0|
-1|1|1|0|0|
-1|1|1|1|0|
-0|0|0|0|1|
-
-5:1
-1|0|0|0|0|
-3|1|0|0|0|
-1|1|1|0|0|
-1|1|1|1|0|
-0|0|0|0|1|
-
-6:2
-1|0|0|0|0|
-3|1|0|0|0|
-4|2|1|0|0|
-1|1|1|1|0|
-0|0|0|0|1|
-
-7:1
-1|0|0|0|0|
-4|1|0|0|0|
-4|2|1|0|0|
-1|1|1|1|0|
-0|0|0|0|1|
-
-8:4
-1|0|0|0|0|
-4|1|0|0|0|
-4|2|1|0|0|
-1|1|1|1|0|
-1|1|1|1|1|
-
-9:1
-1|0|0|0|0|
-5|1|0|0|0|
-4|2|1|0|0|
-1|1|1|1|0|
-1|1|1|1|1|
-
-10:2
-1|0|0|0|0|
-5|1|0|0|0|
-9|3|1|0|0|
-1|1|1|1|0|
-1|1|1|1|1|
-
-11:1
-1|0|0|0|0|
-6|1|0|0|0|
-9|3|1|0|0|
-1|1|1|1|0|
-1|1|1|1|1|
-
-12:3
-1|0|0|0|0|
-6|1|0|0|0|
-9|3|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-13:1
-1|0|0|0|0|
-7|1|0|0|0|
-9|3|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-14:2
-1|0|0|0|0|
-7|1|0|0|0|
-16|4|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-15:1
-1|0|0|0|0|
-8|1|0|0|0|
-16|4|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-16
-17:1
-1|0|0|0|0|
-9|1|0|0|0|
-16|4|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-18:2
-1|0|0|0|0|
-9|1|0|0|0|
-25|5|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-19:1
-1|0|0|0|0|
-10|1|0|0|0|
-25|5|1|0|0|
-10|4|2|1|0|
-1|1|1|1|1|
-
-20:3
-1|0|0|0|0|
-10|1|0|0|0|
-25|5|1|0|0|
-35|9|3|1|0|
-1|1|1|1|1|
-
-21:1
-1|0|0|0|0|
-11|1|0|0|0|
-25|5|1|0|0|
-35|9|3|1|0|
-1|1|1|1|1|
-
-22:2
-1|0|0|0|0|
-11|1|0|0|0|
-36|6|1|0|0|
-35|9|3|1|0|
-1|1|1|1|1|
-
-23:1
-1|0|0|0|0|
-12|1|0|0|0|
-36|6|1|0|0|
-35|9|3|1|0|
-1|1|1|1|1|
-
-24:4
-1|0|0|0|0|
-12|1|0|0|0|
-36|6|1|0|0|
-35|9|3|1|0|
-36|10|4|2|1|
-
-25:1
-1|0|0|0|0|
-13|1|0|0|0|
-36|6|1|0|0|
-35|9|3|1|0|
-36|10|4|2|1|
-
-26:2
-1|0|0|0|0|
-13|1|0|0|0|
-49|7|1|0|0|
-35|9|3|1|0|
-36|10|4|2|1|
-
-27:1
-1|0|0|0|0|
-14|1|0|0|0|
-49|7|1|0|0|
-35|9|3|1|0|
-36|10|4|2|1|
-
-28:3
-1|0|0|0|0|
-14|1|0|0|0|
-49|7|1|0|0|
-84|16|4|1|0|
-36|10|4|2|1|
-
-29:1
-1|0|0|0|0|
-15|1|0|0|0|
-49|7|1|0|0|
-84|16|4|1|0|
-36|10|4|2|1|
-
-30:2
-1|0|0|0|0|
-15|1|0|0|0|
-64|8|1|0|0|
-84|16|4|1|0|
-36|10|4|2|1|
-
-"121312141213121512131214121312"
-
-this is n=5 t =30 , you can see that we only care about 1 seqeunce of seqeunce(the first coloum) because other coloum is just the same coloum but /2^n 
-
-so we need this function f(r,t), it means the r row of the first colum after t iter, but this is not a good def
-so I change it to f(r,th) , it means the th-th value  r row of the first coloum, it is easier to write the recursive formula: f:(r,t) = f(r,t-1)+f(r-1,2*t-1) && f(0,t)=1; f(r,0)=0(r>0);
-it is obvious f(1,t) = t;
+	if t is a power of 2, the t=2^n transpose of decompose matrix  is the mul of transpose of  2^n-1 matrix
+	if decompose from a high bit first then we can mul together matrixs 
+ */
 
 
-
-*/
+/* Reflection:
+	most of the problem has a central "action" , try to find the property the action has(like combination,transpose,and other things)
+ */
