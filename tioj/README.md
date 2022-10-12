@@ -19,3 +19,4 @@
 - [ ] 2183 // binary search for max and min slope
 - [ ] 1695
 - [ ] 2147
+- [ ] 1982
