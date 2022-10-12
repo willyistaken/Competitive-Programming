@@ -18,3 +18,4 @@
 - [ ] 1723 // sa , binary search , RMQ
 - [ ] 2183 // binary search for max and min slope
 - [ ] 1695
+- [ ] 2147
