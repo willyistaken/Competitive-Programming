@@ -9,10 +9,12 @@ typedef long long ll;
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int m = 7*24;
-	int n = 7;
+	int m,n;cin>>n>>m;
 	int r= 1;
-	for(int i=0;i<=10;i++){
+	int ans=0;
+	for(int i=1;i<m;i++) if(__gcd(i,m)==1) ans+=1;
+	cout<<ans<<"\n";
+	for(int i=0;i<=100;i++){
 		cout<<i<<" "<<r<<"\n";
 		r = (1LL*n*r)%m;
 	}
