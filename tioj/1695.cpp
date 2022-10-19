@@ -4,61 +4,92 @@ typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds::
 
+ll n,m;
 
-ll phi(ll k){
-	ll r = k;
-	for(ll p = 2;p*p<=k;p++){
-		if(k%p==0){
-			while(k%p==0) k/=p;
+vector<int> prime;
 
-			r-= r/p;
+
+void init(){
+	bitset<10000005> notprime;
+	notprime.reset();
+	for(int i=2;i<=1e7;i++){
+		if(!notprime[i]){
+			prime.push_back(i);
+			for(int j= i;j<=1e7;j+=i) notprime[j]=1;
 		}
 	}
-	if(k>1) r-=r/k;
-	return r;
 }
-ll n,m;
-ll pow(ll p){
+
+ll pow(ll a,ll p,ll mod){
 	ll r = 1;
-	ll a = n;
 	while(p){
-		if(p & 1) r = (r*a)%m;
-		a = (a*a)%m;
+		if(p&1) r = ((__int128)r*a)%mod;
+		a = ((__int128)a*a)%mod;
 		p>>=1;
 	}
 	return r;
 }
 
-int main(){
-	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	while(cin>>n>>m){
-		ll d = __gcd(pow(m),m);
-		ll l = -1;ll r = m;
-		while(r-l>1){
-			ll mid = l +((r-l)/2);
-			if(__gcd(pow(mid),m)==d) r = mid;
-			else l = mid;
+vector<int> factor(int g){
+	vector<int> f;
+	for(int i=1;i<=sqrt(g);i++){
+		if(g%i==0){
+			f.push_back(i);
+			f.push_back(g/i);
 		}
-		ll x0 = l+1;
-		ll start = pow(x0);
-		ll p = phi(m);
-		ll mincycle = p;
-		for(ll i = 1;i<=sqrt(p);i++){
-			if(p%i==0){
-				if(pow(x0+i)==start) {
-					mincycle = min(mincycle,i);
-					break;
-				}
-				if(pow(x0+(p/i))==start) mincycle = min(mincycle,p/i);
-			}
-		}
-		cout<<x0<<" "<<mincycle<<"\n";
 	}
-	return 0;
+	sort(f.begin(),f.end());
+	return f;
+}
+pair<ll,ll> calc(int p,int cnt){
+	ll mod = pow(p,cnt,1e18);
+	if(n%p==0){
+		ll r = 1;
+		for(ll i=1;i<=mod;i++){
+			r = ((__int128)r*n)%mod;
+			if(r==0) return {i,1};
+		}
+	}else{
+		ll mincy = 1e18;
+		vector<int> f = factor(p-1);	
+		ll g = 1;
+		ll mod = pow(p,cnt,1e18);
+		for(int k = 0;k<cnt;k++){
+			for(auto v:f){
+				if(pow(n,v*g,mod)==1){
+					mincy = min(mincy,v*g);
+				}
+			}
+			g = g*p;
+		}
+		return {0,mincy};
+	}
+	assert(1==0);
+	return {0,0};
 }
 
 
-/*
-idea now: use the fact the gcd will be stable, binary search for x, and use the fact that phi(m) must be a mutiple of p, search for p;
-too slow, I guess the bottle neck is at phi and factor (sqrt(n)...)
-*/
+
+int main(){
+	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);	
+	init();
+	while(cin>>n>>m){
+		n%=m;
+		ll pre = 0;
+		ll cycle = 1;
+		for(auto i : prime){
+			if(m%i==0){
+				int p = i;
+				int cnt=0;
+				while(m%p==0){
+					cnt++;
+					m/=p;
+				}
+				pair<ll,ll> temp = calc(p,cnt);
+				pre = max(pre,temp.first);
+				cycle = ((__int128)cycle*temp.second)/__gcd(cycle,temp.second);
+			}
+		}
+		cout<<pre<<" "<<cycle<<"\n";
+	}
+}
