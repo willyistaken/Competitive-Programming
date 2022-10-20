@@ -14,6 +14,12 @@ void getbinary(bool te[25],int v){
 int n;
 vector<int> arr;
 
+struct trie{
+	struct node{
+
+	};
+	
+};
 
 
 ll ans(int l,int r){
@@ -25,7 +31,7 @@ ll ans(int l,int r){
 	int rmax[r-mid+1]={0};
 	for(int i=1;i<mid-l+1;i++) lmax[i] = max(lmax[i-1],arr[mid-i]);	
 	for(int i=1;i<r-mid+1;i++) rmax[i] = max(rmax[i-1],arr[mid+i-1]);
-
+		
 }
 
 

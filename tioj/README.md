@@ -17,5 +17,5 @@
 - [ ] 1723 // sa , binary search , RMQ
 - [ ] 1982
 - [ ] 2176
+- [ ] 2028
 - [ ] 2078 // find modular inverse in a special function mod 100 and can only ask 100 times
-- [ ] 1361
