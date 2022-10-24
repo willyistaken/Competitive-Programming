@@ -1,100 +1,106 @@
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <bitset>
-#include <queue>
-#include <vector>
-#define lld long long
-#define PB push_back
+#pragma GCC optimize("O3")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define FOR(x,a,b) for(int x=a;x<=b;x++)
+#define pb emplace_back
 #define F first
 #define S second
-#define jizz cin.tie(0);ios_base::sync_with_stdio(0);
-#define endl '\n'
-using namespace std;
-typedef pair<int,lld> Pair;
-struct Edge{
-    int from,to;
-    lld w;
-    bool operator<(const Edge &x)const{
-        return w < x.w;
-    }
-}E[500005];
-struct DJS{
-    int p[1005];
-    void init(){for(int i = 0 ; i < 1005; i++)p[i] = i;}
-    int query(int x){return p[x] == x?x:p[x] = query(p[x]);}
-    void unite(int x,int y){
-        x = query(x);
-        y = query(y);
-        p[x] = y;
-    }
-    bool same(int x,int y){return query(x) == query(y);}
-}djs;
-lld mst,smst;
-vector<Pair> v[1005];
-lld p[1005][12],mx[1005][12];
-int in[1005],out[1005],t;
-bool isfa(int a,int b){return in[a] <= in[b] && out[a] >= out[b];}
-void DFS(int now,int fa,lld l){
-    in[now] = ++t;
-    p[now][0] = fa;
-    mx[now][0] = l;
-    for(int i = 1 ;i < 12 ; i++){
-        p[now][i] = p[p[now][i-1]][i-1];
-        mx[now][i] = max(mx[now][i-1],mx[p[now][i-1]][i-1]);
-    }
-    for(Pair i : v[now]){
-        if(i.F != fa)DFS(i.F,now,i.S);
-    }
-    out[now] = ++t;
-}
-lld LCA(int a,int b){
-    lld maxx = 0;
-    if(a == b)return 0;
-    if(isfa(b,a))swap(a,b);
-    if(!isfa(a,b)){
-        for(int i = 11; i >= 0 ; i--){
-            if(!isfa(p[a][i],b)){
-                maxx = max(maxx,mx[a][i]);
-                a = p[a][i];
-            }
+
+const int MAX = 1e6;
+const int SIZE = 5e5 + 5;
+
+bool isp[MAX + 5];
+int phi[MAX + 5];
+vector<int> prime;
+
+void sieve() {
+    isp[1] = phi[1] = 1;
+    FOR (i, 2, MAX) {
+        if (!isp[i]) {
+            prime.pb (i);
+            phi[i] = i - 1;
         }
-        maxx = max(maxx,mx[a][0]);
-        a = p[a][0];
-    }
-    for(int i = 11; i >= 0 ; i--){
-        if(!isfa(p[b][i],a)){
-            maxx = max(maxx,mx[b][i]);
-            b = p[b][i];
+        for (int p : prime) {
+            int t = i * p;
+            if (t > MAX)
+                break;
+            isp[t] = 1;
+            if (i % p == 0) {
+                phi[t] = phi[i] * p;
+                break;
+            } else
+                phi[t] = phi[i] * (p - 1);
         }
     }
-    return max(maxx,mx[b][0]);
 }
-int main(){jizz
-    out[0] = 2147483647;
-    djs.init();
-    int n,m;cin >> n >> m ;
-    for(int i = 0 ; i < m ; i++)
-        cin >> E[i].from >> E[i].to >> E[i].w;
-    sort(E,E+m);
-    queue<int> q;
-    int count = 0;
-    for(int i = 0 ; i < m ; i++){
-        if(!djs.same(E[i].from,E[i].to)){
-            djs.unite(E[i].from,E[i].to);
-            v[E[i].from].PB({E[i].to,E[i].w});
-            v[E[i].to].PB({E[i].from,E[i].w});
-            mst += E[i].w; 
-            count++;
-        }else q.push(i);
+
+int n, k, a[SIZE];
+
+int power (int d, int up, int mod) {
+    int ans = 1;
+    while (up) {
+        if (up & 1)
+            ans = ans * d % mod;
+        d = d * d % mod;
+        up >>= 1;
     }
-    if(count != n-1)return cout << "-1 -1" << endl ,0;  
-    smst = (1LL << 62);
-    DFS(1,0,0);
-    while(!q.empty()){
-        int tmp = q.front();q.pop();
-        smst = min(smst,mst-LCA(E[tmp].from,E[tmp].to)+E[tmp].w);
+    return ans;
+}
+
+tuple<int, int, int> len (int x, int mod) {
+    int last = 1, now;
+    for (int i = 1;; i++) {
+        now = last * x % mod;
+        if (__gcd (now, mod) == __gcd (last, mod))
+            return {__gcd (now, mod), last, i - 1};
+        last = now;
     }
-    cout << mst << ' ' << (smst == (1LL << 62) ? -1:smst ) << endl;
-    return 0;
+}
+
+int brute (int i) {
+    if (i == n)
+        return a[i];
+    return power (a[i], brute (i + 1), 2e9);
+}
+
+bool smaller (int i, double x) {
+    if (x < 1)
+        return 0;
+    if (i == n)
+        return a[i] < x;
+    return smaller (i + 1, log (x) / log (a[i]));
+}
+
+int turn (int x, int mod) {
+    x %= mod;
+    return x < 0 ? x + mod : x;
+}
+
+int cal (int i, int mod) {
+    int f;
+    if (mod == 1)
+        return 0;
+    if (i == n)
+        return a[i] % mod;
+    if (__gcd (a[i], mod) == 1)
+        return power (a[i], cal (i + 1, phi[mod]), mod);
+    auto [g, K, N] = len (a[i], mod);
+    if (smaller (i + 1, N))
+        return power (a[i], brute (i + 1), mod);
+    return K * power (a[i], turn (cal (i + 1, phi[mod / g]) - N, phi[mod / g]), mod / g) % mod;
+}
+
+void solve() {
+    FOR (i, 1, n) cin >> a[i];
+    cin >> k;
+    cout << cal (1, k) << '\n';
+}
+
+int32_t main() {
+    ios::sync_with_stdio (false), cin.tie (0);
+    sieve();
+    while (cin >> n && n)
+        solve();
 }

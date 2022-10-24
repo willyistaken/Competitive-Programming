@@ -19,3 +19,5 @@
 - [ ] 2176
 - [ ] 2028
 - [ ] 2078 // find modular inverse in a special function mod 100 and can only ask 100 times
+- [ ] 1827 // persistant segment tree
+- [ ] 2061 // just dp it , it is just a rmq
