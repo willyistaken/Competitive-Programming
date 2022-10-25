@@ -15,10 +15,8 @@ int n;
 vector<int> arr;
 
 struct trie{
-	struct node{
-
-	};
-	
+	trie* child[2];			
+				
 };
 
 

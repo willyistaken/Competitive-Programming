@@ -7,7 +7,6 @@
 - [ ] 1594 //catalan number , intense math
 - [ ] 1672 // dynamic dsu using pbds fast hashmap , or just use offline and coordinate compression?
 - [ ] 1205
-- [ ] 1725 // hash , than sqrt decomp? can be done in o(nsqrt(n)) 4000ms or z-algorithm and stuff
 - [ ] 2140 // voting algorithm on segment tree beats
 - [ ] 1836 // dynamic 2d segment tree(no lazy tag)
 - [ ] 1241 //some cool dp? emunerate the second to last Factor and compute(but how to compute)
@@ -15,9 +14,7 @@
 - [ ] 1934 //krap's algorithm with scc
 - [ ] 2027 // dc , trie
 - [ ] 1723 // sa , binary search , RMQ
-- [ ] 1982
-- [ ] 2176
-- [ ] 2028
 - [ ] 2078 // find modular inverse in a special function mod 100 and can only ask 100 times
 - [ ] 1827 // persistant segment tree
-- [ ] 2061 // just dp it , it is just a rmq
+- [ ] 2061 // dp
+- [ ] 1696
