@@ -10,16 +10,15 @@ const int MOD = 1e9+7;
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	int n;cin>>n;
-	ll dp[n+1][7];
+	int dp[n+1];
 	memset(dp,0,sizeof(dp));	
-	dp[0][0]=1;
+	dp[0]=1;
 	for(int i=1;i<=n;i++){
-		for(int k = 0;k<6;k++){
-			dp[i][k] = (dp[i-1][k]+dp[i-1][max(k+1,6)]+dp[i-1][max(k+2,6)]+dp[i-1][max(k+3,6)]+dp[i-1][max(k+4,6)]+dp[i-1][max(k+5,6)])%MOD;
-			cout<<dp[i][k]<<" ";
+		for(int k=1;k<=6;k++){
+			if(i-k<0) break;
+			else dp[i] = (dp[i]+dp[i-k])%MOD;
 		}
-		cout<<"\n";
 	}
-	cout<<dp[n][0]<<"\n";
+	cout<<dp[n]<<"\n";
 	return 0;
 }
