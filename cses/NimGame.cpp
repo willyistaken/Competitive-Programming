@@ -9,9 +9,17 @@ typedef long long ll;
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n = 500;
-	cout<<n<<"\n";
-	for(int i=2;i<=500;i++) cout<<i<<" "<<n<<"\n";
+	int t;cin>>t;
+	while(t--){
+		int n;cin>>n;
+		int s = 0;
+		for(int i=0;i<n;i++){
+			int a;cin>>a;
+			s^=a;
+		}
+		if(s) cout<<"first\n";
+		else cout<<"second\n";
+	}
 
 	return 0;
 }
