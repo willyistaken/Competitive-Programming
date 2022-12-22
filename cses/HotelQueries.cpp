@@ -1,12 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-//#include<bits/extc++.h>ja
+//#include<bits/extc++.h>
 //__gnu_pbds
+int n,m;
 
 struct SEG{
 	vector<int> arr;
-	void init(int n){
+	void init(){
 		arr.resize(4*n,0);
 	}
 	void modify(int ind,int v,int L,int R,int arri){
@@ -28,5 +29,34 @@ struct SEG{
 			return max(query(l,M,L,M,2*arri),query(M,r,M,R,2*arri+1));
 		}
 	}
-};
+} seg;
 
+
+int main(){
+	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	cin>>n>>m;	
+	seg.init();
+	for(int i=0;i<n;i++){
+		int a;cin>>a;
+		seg.modify(i,a,0,n,1);
+	}
+	for(int i=0;i<m;i++){
+		int a;cin>>a;
+		if(seg.query(0,n,0,n,1)<a) {
+			 cout<<0<<" ";
+			continue;
+		}
+		int l = 0;int r = n;
+		while(r-l>1){
+			int mid = (r+l)/2;
+			//cout<<mid<<' '<<seg.query(0,mid,0,n,1)<<"\n";	
+			if(seg.query(0,mid,0,n,1)>=a) r = mid;
+			else l = mid;
+		}
+		int v = seg.query(0,r,0,n,1);
+		cout<<r<<" ";
+		seg.modify(r-1,v-a,0,n,1);
+	}
+	cout<<"\n";
+	return 0;
+}
