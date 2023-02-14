@@ -4,23 +4,25 @@ typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds
 
-
-void x(int a,int b){
-	for(int i=1;i<=max(a,b);i++){
-		if(a%i==0 && b%i==0) continue;
-		if(a%i==0 || b%i==0) cout<<i<<" ";
-	}
-	cout<<"\n";
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+//#include<bits/extc++.h>
+//__gnu_pbds
+int id(int l,int r){
+	return (l+r)|(l!=r);
 }
 
+void built(int l,int r){
+	cout<<id(l,r)<<" "<<l<<" "<<r<<'\n';
+	if(l==r) return ;
+	int m = (l+r)/2;
+	built(l,m);
+	built(m+1,r);
+}
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	for(int i=1;i<=100;i++){
-		for(int j=i;j<=100;j++){
-			cout<<i<<","<<j<<":";x(i,j);
-		}
-	}
-		
-
+	int n;cin>>n;
+	built(1,n);
 	return 0;
 }

@@ -10,21 +10,23 @@ typedef long long ll;
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	srand(time(0));
-	int n = 20;
-	int q = 10;
+	int n = 10;
+	int q = 100;
 	cout<<n<<" "<<q<<"\n";
 	for(int i=0;i<n;i++) cout<<rand()%100<<" ";
 	cout<<"\n";
 	while(q--){
-		int ty = rand()%2;
-		if(ty){
-			cout<<"2 ";
-		}else{
-			cout<<"1 ";
-		}
-		int a = rand()%n+1;int b = rand()%n+1;
-		if(a>b) swap(a,b);
-		cout<<a<<' '<<b<<"\n";
+		int ty = rand()%4;
+		ty++;
+		cout<<ty<<" ";
+		int l = rand()%n;
+		int r = rand()%n;
+		if(l>r) swap(l,r);
+		l++;r++;
+		cout<<l<<" "<<r<<" ";
+		int x = rand()%100000000;
+		if(ty<=2) cout<<x<<"\n";
+		else cout<<"\n";
 	}
 	return 0;
 }
