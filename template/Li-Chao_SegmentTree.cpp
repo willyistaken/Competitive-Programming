@@ -31,7 +31,7 @@ struct LiChao{
 		int M = (L+R)/2;
 		if(arr[arri].m<seg.m) swap(arr[arri],seg);
 		if(arr[arri](M)>seg(M)){
-			swap(arr[arri],seg);		
+			swap(arr[arri],seg);	
 			insert(seg,L,M,2*arri);
 		}else{
 			insert(seg,M,R,2*arri+1);
