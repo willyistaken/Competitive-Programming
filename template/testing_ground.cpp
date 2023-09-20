@@ -5,36 +5,50 @@ typedef long long ll;
 //__gnu_pbds
 
 
+const int MOD = 998244353;
 
-
-int euler_phi(int n) {
-  int ans = n;
-  for (int i = 2; i * i <= n; i++)
-    if (n % i == 0) {
-      ans = ans / i * (i - 1);
-      while (n % i == 0) n /= i;
-    }
-  if (n > 1) ans = ans / n * (n - 1);
-  return ans;
-}
-
-int pow(int n,int p){
-	int ans = 1;
-	for(int i=0;i<p;i++) ans*=n;
-	return ans;
-}
-
-int calc(int k){
-	int ans = 0;
-	for(int i=1;i<=k;i++){
-		if(k%i==0) ans+=euler_phi(i*i);
-	}
-	return ans;
-}
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	for(int i=1;i<100;i++)	{
-		cout<<calc(i)<<"\n";
+	int n;cin>>n;
+	vector<int> v;
+	for(int i=0;i<n;i++){
+		int a,b;cin>>a>>b;
+		for(int j=0;j<b;j++) v.push_back(a);
 	}
+	int c = v.size();
+	ll ans = 0;
+	map<int,ll> mp;
+	map<int,ll> mp2;
+	for(int j=0;j<v.size();j++){
+		mp[v[j]]+=0;
+		mp2[v[j]]+=0;
+		for(int i=0;i<(1<<c);i++){
+			ll sum = 0;	
+			int d = 0;
+			for(int k=0;k<c;k++){
+				if((i>>k)&1){
+					sum+=v[k];
+					d = __gcd(d,v[k]);
+					sum = sum%MOD;
+				}
+			}
+			if(d!=1 && __gcd(d,v[j])==1){
+				//cout<<j<<" "<<v[j]<<" "<<sum<<" "<<sum*sum<<"\n";
+				mp[v[j]]+=sum;	
+				mp2[v[j]]+=sum*sum;
+				ans+=(1LL*sum*(sum+v[j]))%MOD;
+				ans%=MOD;
+			}
+		}
+	}
+	for(auto i : mp){
+		cout<<i.second<<"\n";
+	}
+	cout<<"\n";
+	for(auto i : mp2){
+		cout<<i.second<<"\n";
+	}
+	cout<<ans<<"\n";
+
 	return 0;
 }
