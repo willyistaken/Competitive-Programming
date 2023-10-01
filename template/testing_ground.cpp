@@ -3,52 +3,36 @@ using namespace std;
 typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds
-
-
-const int MOD = 998244353;
-
+const int N = 5005;
+ll dp[N];
+int Bpa[N];
+	
+ 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n;cin>>n;
-	vector<int> v;
-	for(int i=0;i<n;i++){
-		int a,b;cin>>a>>b;
-		for(int j=0;j<b;j++) v.push_back(a);
+	int n,K;cin>>n>>K;			
+	string s;cin>>s;
+	int pa = 0;
+	int pb = 0;
+	for(int i=1;i<=2*n;i++){
+		if(s[i-1]=='A') pa++;
+		if(s[i-1]=='B') Bpa[++pb]=pa;
 	}
-	int c = v.size();
-	ll ans = 0;
-	map<int,ll> mp;
-	map<int,ll> mp2;
-	for(int j=0;j<v.size();j++){
-		mp[v[j]]+=0;
-		mp2[v[j]]+=0;
-		for(int i=0;i<(1<<c);i++){
-			ll sum = 0;	
-			int d = 0;
-			for(int k=0;k<c;k++){
-				if((i>>k)&1){
-					sum+=v[k];
-					d = __gcd(d,v[k]);
-					sum = sum%MOD;
-				}
+	for(int i=1;i<=n;i++) dp[i]=1e15;
+	int best = 0;
+	for(int k=1;k<=K;k++){
+		for(int i=n;i>=1;i--){
+			dp[i] = 1e18;
+			int cost = 0;
+			for(int j=1;j<=i;j++){
+				cost+=max(0,i-Bpa[i-j+1]);
+				if(dp[i]>cost+dp[i-j]) best=i-j;
+				dp[i] = min(dp[i],cost+dp[i-j]);
 			}
-			if(d!=1 && __gcd(d,v[j])==1){
-				//cout<<j<<" "<<v[j]<<" "<<sum<<" "<<sum*sum<<"\n";
-				mp[v[j]]+=sum;	
-				mp2[v[j]]+=sum*sum;
-				ans+=(1LL*sum*(sum+v[j]))%MOD;
-				ans%=MOD;
-			}
+			cout<<dp[i]<<","<<best<<" ";
 		}
+		cout<<"\n";
 	}
-	for(auto i : mp){
-		cout<<i.second<<"\n";
-	}
-	cout<<"\n";
-	for(auto i : mp2){
-		cout<<i.second<<"\n";
-	}
-	cout<<ans<<"\n";
-
+	cout<<dp[n]<<"\n";
 	return 0;
 }
