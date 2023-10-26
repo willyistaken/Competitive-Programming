@@ -1,82 +1,106 @@
 #include "Ali.h"
+#include<iostream>
 #include <string>
 #include <vector>
-#include<iostream>
-#define pb push_back
-using namespace std;
- 
+#include<cassert>
+#include<queue>
 namespace {
-	vector<int> dep, tab, gdzie;
-	vector<vector<int> > E;
-	int blo_siz=30;
-	int blo_num=(1<<10);
-	int max_pot=14;
-string enc(int a){
-	string res(max_pot, '0');
-	for(int i=0; i<max_pot; i++){
-		res[i]='0'+!!(a&(1<<i));
-	}
-	return res;
-}
-int dec(string s){
-	int res=0;
-	for(int i=0; i<s.size(); i++){
-		res+=(1<<i)*(s[i]-'0');
-	}
-	return res;
-}
-}
-void dfs(int v, int p){
-	//cerr<<v<<" "<<p<<endl;
-	gdzie[v]=tab.size();
-	tab.pb(dep[v]);
-	for(int u:E[v]){
-		if(u!=p){
-			dep[u]=dep[v]+1;
-			dfs(u, v);
-			tab.pb(dep[v]);
+std::vector<std::vector<int> > side;
+int rN = 0;
+std::vector<int> p[20];
+std::vector<int> dep;
+void dfs(int cur){
+	for(int i : side[cur])	{
+		if(!dep[i]){
+			p[0][i]= cur;
+			dep[i]=dep[cur]+1;
+			dfs(i);
 		}
 	}
 }
-void Init(int n, std::vector<int> U, std::vector<int> V) {
-	E.clear();
-	gdzie.clear();
-	dep.clear();
-	tab.clear();
-	gdzie.resize(n);
-	dep.resize(n);
-	E.resize(n);
-	for(int i=0; i<n-1; i++){
-		//cerr<<U[i]<<" "<<V[i]<<endl;
-		E[U[i]].pb(V[i]);
-		E[V[i]].pb(U[i]);
+int dis(int a,int b){
+	if(a==b) return 0;
+	if(dep[a]>dep[b]) std::swap(a,b);
+	int oga = a;
+	int ogb = b;
+	for(int i=19;i>=0;i--){
+		if(dep[p[i][b]]>=dep[a]) b=p[i][b];
 	}
-	dfs(0, -1);
-	for(int i=0; i<n; i++){
-		SetID(i, gdzie[i]);
+	if(a==b) return dep[ogb]-dep[oga];
+	for(int i=19;i>=0;i--){
+		if(p[i][a]!=p[i][b]){
+			a = p[i][a];
+			b = p[i][b];
+		}
 	}
-	while(tab.size()%blo_siz){
-		tab.pb(tab.back()+1);
+	b = p[0][b];
+	a = p[0][a];
+	int c = b;
+	assert(a==b);
+	//std::cout<<oga<<" "<<ogb<<" "<<c<<" "<<dep[oga]<<" "<<dep[ogb]<<" "<<dep[c]<<"\n";
+	return dep[oga]+dep[ogb]-2*dep[c];
+}
+std::string dtb(int x){
+	std::string s;
+	for(int i=0;i<14;i++){
+		if((x>>i)&1) s+='1';
+		else s+='0';
 	}
+	return s;
 }
  
-string SendA(std::string s) {
-	int b1=dec(s.substr(0, 10)), b2=dec(s.substr(10, 10));
-	int mini=(1<<max_pot)-1;
-	string res;
-	for(int i=b1+1; i<b2; i++){
-		for(int j=i*blo_siz; j<(i+1)*blo_siz; j++){
-			mini=min(mini, tab[j]);
+}
+ 
+void Init(int N, std::vector<int> U, std::vector<int> V) {
+	rN=N;
+	side.resize(N);
+	dep.resize(N);
+	for(int i=0;i<20;i++) p[i].resize(N);
+	for(int i=0;i<N;i++){
+		dep[i]=0;
+		side[i].clear();
+		for(int k=0;k<20;k++) p[k][i]=0;
+	}
+	for(int i=0;i<N-1;i++){
+		side[U[i]].push_back(V[i]);
+		side[V[i]].push_back(U[i]);
+	}
+	dep[0]=1;
+	dfs(0);
+	for(int j=1;j<20;j++)	{
+		for(int i=0;i<N;i++) p[j][i] = p[j-1][p[j-1][i]];
+	}
+	for(int i=0;i<N;i++) SetID(i,i);
+}
+ 
+std::string SendA(std::string S) {
+	std::string re;
+	int a = 0;
+	int b = 0;
+	for(int i=0;i<6;i++){
+		if(S[i]=='1'){
+			if(S[14+i]=='1') a+=(1<<i);
+			else b+=(1<<i);
+		}else{
+			if(S[14+i]=='1') {a+=(1<<i);b+=(1<<i);}
 		}
 	}
-	res+=enc(mini);
-	res+=enc(tab[b1*blo_siz]);
-	for(int i=b1*blo_siz+1; i<blo_siz*(b1+1); i++){
-		res+='0'+char(tab[i]>tab[i-1]);
+ 
+	for(int k=0;k<(1<<8);k++){
+		int aa = a;
+		int bb = b;
+		for(int i=6;i<14;i++){
+			if(S[i]=='1'){
+				if((k>>(i-6))&1) aa+=(1<<i);
+				else bb+=(1<<i);
+			}else{
+				if((k>>(i-6))&1) {aa+=(1<<i);bb+=(1<<i);}
+			}
+		}
+		if(aa>=rN || bb>=rN) re+=dtb(0);
+		else {re+=dtb(dis(aa,bb)); 
+//			std::cout<<"\n"<<aa<<" "<<bb<<" "<<dis(aa,bb)<<"\n";
+		}
 	}
-	res+=enc(tab[b2*blo_siz]);
-	for(int i=b2*blo_siz+1; i<blo_siz*(b2+1); i++){
-		res+='0'+char(tab[i]>tab[i-1]);
-	}
-	return res;
+	return re;
 }

@@ -56,12 +56,14 @@ void add(int ind){
 			if(Z[it->second]>=Z[ind]) posP.erase(it--);
 			else break;
 		}
+		if(k>P){
 		posP[Y[ind]]=ind;
 		if(sgt.get(k)>Z[ind]){
 			P = k;
 			while(posP.size() && ordery[posP.begin()->second]<=P){
 				posP.erase(posP.begin());
 			}
+		}
 		}
 	}else{
 		int g = it->second;

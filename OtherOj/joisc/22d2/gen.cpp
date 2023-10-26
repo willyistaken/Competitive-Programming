@@ -12,14 +12,11 @@ int main(){
 	int n;
 	mt19937 gen(time(0));
 	auto p = uniform_int_distribution<int>(1,300);
-	n = p(gen)%50;
+	n = p(gen)%5+1;
 	cout<<n<<"\n";
 	for(int i=0;i<n;i++){
-		int a = p(gen);
-		int b = p(gen);
-		int c = p(gen);
-		assert(a<=300 && b<=300 && c<=300 && a>0 && b>0 && c>0);
-		cout<<a<<" "<<b<<" "<<c<<"\n";
+		cout<<((p(gen)&1)?('a'):('b'));
 	}
+	cout<<"\n100\n1\n10\n";
 	return 0;
 }

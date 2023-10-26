@@ -1,8 +1,9 @@
 #!/usr/bin/zsh
-for i in {0..20}
+echo "start" > result.txt
+for i in {0..200}
 do
 ./gen > testcase.in
-./C < testcase.in > Cout.txt
-./C2 < testcase.in >> Cout.txt
+./A < testcase.in > Cout.txt
+./A2 < testcase.in >> Cout.txt
 ./check < Cout.txt >> result.txt
 done

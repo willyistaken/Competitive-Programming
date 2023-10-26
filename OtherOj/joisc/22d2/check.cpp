@@ -10,18 +10,13 @@ typedef long long ll;
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	int n;cin>>n;
+	string s; cin>>s;
 	int a,b;cin>>a>>b;
-	ifstream in;
-	in.open("testcase.in");
 	if(a!=b){
 		cout<<"\nhasstuff:"<<a<<" "<<b<<":\n";
-		int n;in>>n;	
 		cout<<n<<"\n";
-		for(int i=0;i<n;i++){
-			int x,y,z;cin>>x>>y>>z;
-			cout<<x<<" "<<y<<" "<<z<<"\n";
-		}
-		cout<<"\n\n\n";
+		cout<<s<<"\n";
 	}
 		
 
