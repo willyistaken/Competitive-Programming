@@ -3,18 +3,25 @@
 #include <vector>
 #include<iostream>
 using namespace std;
-namespace {
-const int P = 10;
-int variable_example = 0;
-
-}
 
 long long Bruno(std::vector<int> u) {
-	long long A = 0;		
-	int sz = u.size();
-	for(int i=0;i<sz;i++){
-		if(u[i]==1) A+=(1LL<<(i/(2*P)+1));
+	int a = 0;
+	vector<int> ans;
+	ans.push_back(0);
+	long long A = 0;
+	long long p = 1;
+	for(auto i : u){
+		if(i==0) a--;
+		else a++;
+		if(a==3){//mod 3 ==0
+			A+=p;	
+			p<<=1;
+			a-=3;
+		}
+		if(a==-2){//mod 3 == 1
+			p<<=1;
+			a+=3;
+		}
 	}
-//	cerr<<A<<"\n";
 	return A;
 }

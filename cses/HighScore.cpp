@@ -10,6 +10,7 @@ bool mark[2505];
 
 bool vis[2505];
 bool dfs(int cur){
+	if(mark[cur]) return 1;
 	vis[cur] = 1;	
 	for(auto i : dfss[cur]){
 		if(!vis[i]){

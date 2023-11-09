@@ -1,10 +1,12 @@
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds
 // 0-base
-#define inf 100000000000000
+// my dp is just wrong, l,r can be the same, why? because 
 ll suma,sumb;
 vector<int> d;
 inline int ind(int X){
@@ -12,14 +14,15 @@ inline int ind(int X){
 }
 
 struct Data{
-	ll dp[2][2] = {{0,-inf},{-inf,0}};
+	//ll dp[2][2] = {{(ll)-1e17,(ll)-1e17},{(ll)-1e17,(ll)-1e17}};
+	ll dp[2][2] = {{0,0},{0,0}};
 };
 Data operator+(Data &a,Data &b){
 	Data ret;
-	ret.dp[0][0]= max(a.dp[0][0]+b.dp[0][0],a.dp[0][1]+b.dp[1][0]);
-	ret.dp[0][1]= max(a.dp[0][0]+b.dp[0][1],a.dp[0][1]+b.dp[1][1]);
-	ret.dp[1][0]= max(a.dp[1][0]+b.dp[0][0],a.dp[1][1]+b.dp[1][0]);
-	ret.dp[1][1]= max(a.dp[1][0]+b.dp[0][1],a.dp[1][1]+b.dp[1][1]);
+	ret.dp[0][0]= max({a.dp[0][0]+b.dp[0][0],a.dp[0][1]+b.dp[1][0]});
+	ret.dp[0][1]= max({a.dp[0][0]+b.dp[0][1],a.dp[0][1]+b.dp[1][1]});
+	ret.dp[1][0]= max({a.dp[1][0]+b.dp[0][0],a.dp[1][1]+b.dp[1][0]});
+	ret.dp[1][1]= max({a.dp[1][0]+b.dp[0][1],a.dp[1][1]+b.dp[1][1]});
 	return ret;
 }
 
@@ -28,7 +31,7 @@ struct SegTree{
 	struct node{
 		Data dt;
 		ll tag[2]={0,0};
-		void add_tag(int v,int o){
+		void add_tag(ll v,int o){
 			dt.dp[o][o^1]+=v;
 			tag[o]+=v;
 		}
@@ -36,14 +39,12 @@ struct SegTree{
 	vector<node> arr;
 	void init(int _s){
 		s = _s;
-		arr.resize(4*s);
+		arr.resize(4*s+5);
 	}
 	void pull(int ind){
-		if(2*ind+1>=4*s) return;
 		arr[ind].dt = arr[2*ind].dt+arr[2*ind+1].dt;
 	}
 	void push(int ind){
-		if(2*ind+1>=4*s) return;
 		for(int o=0;o<2;o++){
 			if(arr[ind].tag[o]){
 				arr[2*ind].add_tag(arr[ind].tag[o],o);
@@ -53,13 +54,12 @@ struct SegTree{
 		}
 	}
 	void update(int ind,int v,int l,int r,int L,int R,int o){	
-		if(l<=r) return;
-		//cout<<l<<" "<<r<<".."<<L<<" "<<R<<endl;
-		push(ind);
+		if(l>=r) return;
 		if(l==L && r==R){
 			arr[ind].add_tag(v,o);
 			return;
 		}
+		push(ind);
 		int mid = (L+R)/2;
 		if(r<=mid) update(2*ind,v,l,r,L,mid,o);
 		else if(l>=mid) update(2*ind+1,v,l,r,mid,R,o);
@@ -70,15 +70,12 @@ struct SegTree{
 		pull(ind);
 	}
 	ll get(){
-		push(1);
-		pull(1);
-		//return max(max(arr[1].dt.dp[0][0],arr[1].dt.dp[1][0])+a,max(arr[1].dt.dp[0][1],arr[1].dt.dp[1][1])+b);
 		return max(max(arr[1].dt.dp[1][1],arr[1].dt.dp[0][1])+sumb,max(arr[1].dt.dp[0][0],arr[1].dt.dp[1][0])+suma);
 	}
 } seg;
 
 
-int main(){
+signed main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
 	int n,L;			
 	cin>>n>>L;
