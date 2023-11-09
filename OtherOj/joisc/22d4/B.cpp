@@ -1,3 +1,5 @@
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
@@ -9,20 +11,20 @@ struct SegTree {
     vector<pair<int,int> > arr;
     vector<int> tag;
     int n;
-	void built(int ind,int L,int R){
-		arr[ind].second = (R-L+1);
-		if(L==R) return;
-		int M = (L+R)/2;
-		built(2*ind,L,M);
-		built(2*ind+1,M+1,R);
-	}
+    void built(int ind,int L,int R) {
+        arr[ind].second = (R-L+1);
+        if(L==R) return;
+        int M = (L+R)/2;
+        built(2*ind,L,M);
+        built(2*ind+1,M+1,R);
+    }
     void init(int _n) {
         n =_n;
         arr.resize(4*n);
-        tag.resize(4*n); 
-		built(1,1,n);
-	} 
-	void push(int ind) {
+        tag.resize(4*n);
+        built(1,1,n);
+    }
+    void push(int ind) {
         if(2*ind+1>4*n) return;
         if(tag[ind]) {
             arr[2*ind].first+=tag[ind];
@@ -37,6 +39,7 @@ struct SegTree {
         return {a.first,a.second+b.second};
     }
     pair<int,int> query(int ind,int l,int r,int L,int R) {
+        if(r<l) return {0,0};
         if(l==L && r==R) {
             return arr[ind];
         }
@@ -47,7 +50,7 @@ struct SegTree {
         return merge(query(2*ind,l,M,L,M),query(2*ind+1,M+1,r,M+1,R));
     }
     void modify(int ind,int l,int r,int L,int R,int v) {
-		//cout<<l<<" "<<r<<"~"<<L<<" "<<R<<"safd"<<endl;
+        //cout<<l<<" "<<r<<"~"<<L<<" "<<R<<"safd"<<endl;
         if(l==L && r==R) {
             arr[ind].first+=v;
             tag[ind]+=v;
@@ -86,7 +89,7 @@ struct IntTree {
     void insert(range a,int ind,int L,int R) {
         int M = (L+R)/2;
         if(a.l<=M && a.r>=M) {
-			cout<<"insert "<<a.l<<" "<<a.r<<"->"<<ind<<"\n";
+            //cout<<"insert "<<a.l<<" "<<a.r<<"->"<<ind<<"\n";
             arr[ind].push(a);
             segtree.modify(1,a.l,a.r,1,n,1);
             return;
@@ -98,7 +101,6 @@ struct IntTree {
         while(arr[ind].size()) {
             range cur = arr[ind].top();
             if(cur.l<=x && cur.r>=x) {
-				cout<<"remove "<<cur.l<<" "<<cur.r<<"->"<<ind<<"\n";
                 segtree.modify(1,cur.l,cur.r,1,n,-1);
                 arr[ind].pop();
             } else {
@@ -109,6 +111,17 @@ struct IntTree {
         if(x==M) return;
         if(x<M) remove(x,2*ind,L,M);
         if(x>M) remove(x,2*ind+1,M+1,R);
+    }
+    void out(int ind,int L,int R) {
+        auto pq = arr[ind];
+        while(pq.size()) {
+//			cout<<pq.top().l<<" "<<pq.top().r<<"->"<<ind<<"k\n";
+            pq.pop();
+        }
+        if(L==R) return;
+        int M = (L+R)/2;
+        out(2*ind,L,M);
+        out(2*ind+1,M+1,R);
     }
 } inttree;
 
@@ -210,24 +223,24 @@ struct SegTree2 {
 int n;
 void MainUpdate(int ind,ll v) {
     inttree.remove(ind,1,1,n);
+    inttree.remove(ind-1,1,1,n);
+    inttree.remove(ind+1,1,1,n);
     segtree2.update(ind,v);
     vector<pair<int,ll> > rcan;
     vector<pair<int,ll> > lcan;
     ll Ax = segtree2.sum(1,ind,1,n);
-    segtree2.getr(1,-(Ax-A[ind]),ind,1,n,rcan);
-    segtree2.getl(1,Ax,ind,1,n,lcan);
-    // a[i]+A[i]>A[x]
-    // 2*a[i]-A[i]>-A[x-1]
-	cout<<"heya:\n\n";
+    segtree2.getr(1,-(Ax),ind,1,n,rcan);
+    segtree2.getl(1,Ax-A[ind],ind,1,n,lcan);
+    // a[i]+A[i]>A[x-1]
+    // 2*a[i]-A[i]>-A[x]
     for(auto pr : rcan) {
-        for(auto pl : lcan) { if(pr.first-1<pl.first+1) continue;
+        for(auto pl : lcan) {
+            if(pr.first-1<pl.first+1) continue;
             ll sumbet = (A[pr.first]-pr.second)-(pl.second-A[pl.first]);
-			cout<<ind<<":"<<pl.first<<" "<<pr.first<<" "<<sumbet<<"\n";
-            if(A[pr.first]>sumbet && A[pl.first]>sumbet){
-				//cout<<"yo\n";
-				//cout<<pl.first+1<<" "<<pr.first-1<<" "<<sumbet<<endl;
-				inttree.insert(range(pl.first+1,pr.first-1),1,1,n);
-			}
+            if(A[pr.first]>sumbet && A[pl.first]>sumbet) {
+                //if(ind==4) cout<<pl.first<<" "<<pr.first<<"gg\n";
+                inttree.insert(range(pl.first+1,pr.first-1),1,1,n);
+            }
         }
     }
 
@@ -247,7 +260,7 @@ int main() {
     for(int i=2; i<n; i++) {
         ll v;
         cin>>v;
-		MainUpdate(i,v);
+        MainUpdate(i,v);
     }
     int q;
     cin>>q;
@@ -258,25 +271,36 @@ int main() {
             int x,y;
             cin>>x>>y;
             x++;
-			MainUpdate(x,y);
+//			cout<<"t\n";
+            MainUpdate(x,y);
         } else {
             int l,r;
             cin>>l>>r;
             l++;
             r++;
-			ll rog = A[r+1];
-			ll log = A[l-1];
-			MainUpdate(r+1,1e16);
-			MainUpdate(l-1,1e16);
-            pair<int,int> ans = segtree.query(1,l,r,1,n);
+            int rl = l;
+            int rr = r;
+
+            vector<pair<int,ll> > rcan;
+            ll Ax = segtree2.sum(1,l,1,n);
+            segtree2.getr(1,-(Ax-A[l]),l,1,n,rcan);
+            for(auto i : rcan) if(i.first<=r) rl = max(rl,i.first);
+
+            vector<pair<int,ll> > lcan;
+            Ax = segtree2.sum(1,r,1,n);
+            segtree2.getl(1,Ax,r,1,n,lcan);
+            for(auto i : lcan) if(i.first>=l) rr = min(rr,i.first);
+            pair<int,int> ans = segtree.query(1,rl,rr,1,n);
             cout<<ans.second<<"\n";
-			MainUpdate(r+1,rog);
-			MainUpdate(l-1,log);
         }
     }
     return 0;
 }
-
-
-// have to fix didn't remove point where range use it as L or R
-// not sure why didn't erase correct segment
+/*
+8
+8 6 1 4 1 1 4 4
+3
+1 3 6
+2 3 8
+2 1 5
+*/
