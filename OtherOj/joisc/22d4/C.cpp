@@ -3,89 +3,89 @@ using namespace std;
 typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds
-const int N = 505;
-int P[N];
-
-int n,m;
-void reset(){
-	for(int i=1;i<=n;i++) P[i]=i;
-}
-
-int query(int x){
-	if(P[x]==x) return x;
-	return P[x]=query(P[x]);
-}
 struct edge{
 	int a,b,w;
-	edge(int _a,int _b,int _c){
-		a = _a;
-		b = _b;
-		w = _c;
-	}
 };
-vector<edge> ed;
-void solve(int x,int g){
-	reset();
-	int l = g-1;int r = g;
-	ll ans = 0;
-	int cnt = 0;
-	while(cnt!=n-1){
-		if(l<0 || r>=m)	{
-			if(l<0)	{
-				if(query(ed[r].a)!=query(ed[r].b)){
-					ans+=abs(x-ed[r].w);
-					cnt++;
-					P[query(ed[r].a)]=query(ed[r].b);
-				}
-				r++;
-			}else{
-				if(query(ed[l].a)!=query(ed[l].b)){
-					ans+=abs(x-ed[l].w);
-					cnt++;
-					P[query(ed[l].a)]=query(ed[l].b);
-				}
-				--l;
-			}
-		}else{
-			if(abs(x-ed[r].w)>abs(x-ed[l].w)){
-				if(query(ed[l].a)!=query(ed[l].b)){
-					ans+=abs(x-ed[l].w);
-					cnt++;
-					P[query(ed[l].a)]=query(ed[l].b);
-				}
-				--l;
-			}else{
-				if(query(ed[r].a)!=query(ed[r].b)){
-					ans+=abs(x-ed[r].w);
-					cnt++;
-					P[query(ed[r].a)]=query(ed[r].b);
-				}
-				r++;
-			}
-		}
+const int N = 505;
+vector<int> tree[N];
+vector<pair<int,int> > prefix;
+set<int> in;
+int P[N];
+vector<edge> eg;	
+int n,m;
+void dfs(int cur,int p){
+	for(auto i : tree[cur]){
+		int a = eg[i].a;
+		int b = eg[i].b;
+		if(cur==b) swap(a,b);
+		if(b==p) continue;
+		P[b] = i;
+		dfs(b,cur);
 	}
-	cout<<ans<<"\n";
 }
+int minedge(int cur){
+	for(int i=0;i<=n;i++) P[i]=-1;
+	int x = eg[cur].a;
+	int y = eg[cur].b;
+	dfs(x,x);
+	if(P[y]==-1) return -1;
+	int minn = -1;
+	while(y!=x){
+		int ny = eg[P[y]].a+eg[P[y]].b-y;
+		int w = eg[P[y]].w;
+		if(minn==-1 || w<eg[minn].w) minn = P[y];
+		y = ny;
+	}
+	return minn;
+}
+
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	cin>>n>>m;
+	cin>>n>>m;	
 	for(int i=0;i<m;i++){
 		int a,b,c;cin>>a>>b>>c;
-		ed.push_back(edge(a,b,c));
+		eg.push_back({a,b,c});
 	}
-	sort(ed.begin(),ed.end(),[](const edge &a,const edge &b){return a.w<b.w;});
+	sort(eg.begin(),eg.end(),[](const edge &a,const edge &b){return a.w<b.w;});
+	vector<int> L(m,-1),R(m,1e9+5);
+	for(int i=0;i<m;i++){
+		int cut = minedge(i);
+		L[i]=0;
+		if(cut>=0){
+			int a = eg[cut].a;
+			int b = eg[cut].b;
+			int k = find(tree[a].begin(),tree[a].end(),cut)-tree[a].begin();
+			tree[a].erase(tree[a].begin()+k);
+			k = find(tree[b].begin(),tree[b].end(),cut)-tree[b].begin();
+			tree[b].erase(tree[b].begin()+k);
+			R[cut] = L[i] = ((eg[cut].w+eg[i].w)/2)+1;
+		}
+		tree[eg[i].a].push_back(i);
+		tree[eg[i].b].push_back(i);
+	}
+	for(int i=0;i<m;i++){
+		prefix.push_back({L[i],i});
+		prefix.push_back({R[i],i});
+	}
+	sort(prefix.begin(),prefix.end());
 	int q;cin>>q;
+	int head = 0;
 	while(q--){
 		int x;cin>>x;
-		int l = -1;
-		int r = m;
-		while(r-l>1){
-			int mid = (l+r)/2;
-			if(ed[mid].w<x) l=mid;
-			else r=mid;
+		while(head<prefix.size() && prefix[head].first<=x){
+			if(in.count(prefix[head].second)) in.erase(prefix[head].second);
+			else in.insert(prefix[head].second);
+			head++;	
 		}
-		solve(x,r);
+	
+		ll ans = 0;
+		for(auto e : in){
+			//cout<<eg[e].a<<" "<<eg[e].b<<" "<<eg[e].w<<"t\n";
+			ans+=abs(eg[e].w-x);
+		}
+		cout<<ans<<"\n";
 	}
+	
 	return 0;
 }
