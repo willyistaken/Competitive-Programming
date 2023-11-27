@@ -63,6 +63,7 @@ int main() {
 				realp = p;
 				Minn = ff;
 			}
+			cout<<i<<" "<<j<<endl;
         }
     }
     double maxnn = calc(realp);
