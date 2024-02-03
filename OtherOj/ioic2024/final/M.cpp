@@ -31,7 +31,7 @@ void solve(){
                 all ++;
             }
             ans += all - ma;
-			fill(clear.begin(),clear.end(),0);
+			fill(cnt.begin(),cnt.end(),0);
             all = 0, ma = 0;
             for(int i=1; i<l; i+=2){
                 cnt[s[i] - 'a'] ++;
@@ -59,13 +59,3 @@ signed main(){
     while(n --) solve();
     return 0;
 }
-/*
-overflow, out of bound (*x.end())
-初始化
-極小測資 special case
-重新讀題
-memory cache
-不要卡在同一個做法!!!!!!!!
-先跳下一題，保持心態!!!!!!!!!
-人生不是只有競賽，你也不會永遠都是新手!!!!!!!!
-*/
