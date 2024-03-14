@@ -3,9 +3,7 @@ using namespace std;
 typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds
-const int N = 150005;
 const ll inf=1e16;
-
 struct DSU{
 	vector<int> P,sz;
 	void reset(int n){
@@ -120,37 +118,21 @@ struct DMST{
 
 int main() {
     ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n,m;
-    cin>>n>>m;
+	int n,m,q;
+    cin>>n>>m>>q;
 	vector<tuple<int,int,ll> > ogE(m);	
-	vector<vector<int> > side(n);
 	for(int i=0;i<m;i++){
 		int a,b;ll w;cin>>a>>b>>w;
 		a--;b--;
 		ogE[i] = {a,b,w};
-		side[a].push_back(i);
-		side[b].push_back(i);
 	}
-
 	DMST dmst(ogE,n);
-	vector<int> anstime(n);
-	int qt=0;
-	for(int i=0;i<n;i++){
-		for(auto k : side[i]){
-			dmst.update(k,inf);
-			qt++;
-		}
-		anstime[i]=qt;
-		for(auto k : side[i]){
-			dmst.update(k,get<2>(ogE[k]));
-			qt++;
-		}
+	for(int i=0;i<q;i++){
+		int k,w;cin>>k>>w;
+		k--;
+		dmst.update(k,w);
 	}
 	vector<ll> ans = dmst.run();
-	for(auto i : anstime){
-		if(ans[i]>=2e16) cout<<-1<<" ";
-		else cout<<ans[i]-(ll)(1e16)<<" ";
-	}
-	cout<<"\n";
+	for(int i=1;i<ans.size();i++) cout<<ans[i]<<"\n";
     return 0;
 }

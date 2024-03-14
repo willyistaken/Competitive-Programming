@@ -9,14 +9,12 @@ typedef long long ll;
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n  =20;
-	srand(time(0));
-	cout<<n<<"\n";
+	mt19937 rng(time(0));
+	int n = rng()%5+2;
+	cout<<n<<"\n"; 
 	for(int i=0;i<n;i++){
-		bool g = (rand()%2);
-		int k = (g)?(-1):(1);
-		cout<<k*(rand()%21)<<" ";
+		cout<<rng()%100<<" "<<rng()%100<<"\n";
 	}
-	cout<<"\n";
+
 	return 0;
 }

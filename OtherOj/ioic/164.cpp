@@ -108,6 +108,10 @@ bool ok(int k){
 			int r = upper_bound(d.begin(),d.end(),make_pair(p+k-1,(int)1e9))-d.begin()-1;
 			int x = lower_bound(d.begin(),d.end(),make_pair(q,i))-d.begin();
 			int m = lower_bound(d.begin(),d.end(),make_pair(p,i))-d.begin();
+			if(p==q){
+				x+=f;	
+				m+=!f;
+			}
 			G.add_edges(x,m+1,r);
 			G.add_edges(x,l,m-1);
 		}
@@ -120,6 +124,9 @@ bool ok(int k){
 		int q = pos[1][i];
 		p = lower_bound(d.begin(),d.end(),make_pair(p,i))-d.begin();
 		q = lower_bound(d.begin(),d.end(),make_pair(q,i))-d.begin();
+		if(p==q){
+			q++;
+		}
 		if(G.query_scc(p)==G.query_scc(q)) return 0;
 	}
 	return 1;
@@ -147,4 +154,3 @@ signed main(){
 	cout<<l<<"\n";
 	return 0;
 }
-
