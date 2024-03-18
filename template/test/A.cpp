@@ -1,167 +1,102 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-//#include<bits/extc++.h>
-//__gnu_pbds
-
-
-struct qT {
-    int type;
-    int a;
-    int d;
-    int t;
-    qT(int _type,int _a,int _d,int _t):type(_type),a(_a),d(_d),t(_t) {}
-};
-const int N = 120005;
-vector<pair<int,int> > side[N];
-static const int B = 5;
-int P[N][B];
-int iv[N][B];
-int dv[N][B];
-int mx[N][B];
-pair<int,int> dfn[N];
-
-struct Qstruct {
-    int n;
-    int T;
-    void dfs(int cur,int p,int v) {
-        dfn[cur].first=++T;
-        P[cur][0]=p;
-        iv[cur][0]=v;
-        dv[cur][0]=v;
-        mx[cur][0]=v;
-        for(auto e : side[cur]) {
-            if(e.first!=p) dfs(e.first,cur,e.second);
-        }
-        dfn[cur].second=++T;
-    }
-    void init(int _n) {
-        n = _n;
-        T = 0;
-        dfs(1,1,1e9);
-        for(int i=0; i<B; i++) {
-            P[1][i]=1;
-            iv[1][i]=-1;
-            dv[1][i]=-1;
-            mx[1][i]=-1;
-        }
-        for(int j=1; j<B; j++) {
-            for(int i=2; i<=n; i++) {
-                P[i][j]=P[P[i][j-1]][j-1];
-                iv[i][j] = (iv[i][j-1]<iv[P[i][j-1]][0])?(iv[P[i][j-1]][j-1]):(-1);
-                dv[i][j] = (dv[i][j-1]>dv[P[i][j-1]][0])?(dv[P[i][j-1]][j-1]):(-1);
-                mx[i][j] = max(mx[i][j-1],mx[P[i][j-1]][j-1]);
-            }
-        }
-    }
-    bool isanc(int a,int b) {
-        return (dfn[a].first<=dfn[b].first)&(dfn[a].second>=dfn[b].second);
-    }
-    int lca(int a,int b) {
-        if(isanc(a,b)) return a;
-        if(isanc(b,a)) return b;
-        for(int j=B-1; j>=0; j--) {
-            if(!isanc(P[a][j],b)) a = P[a][j];
-        }
-        return P[a][0];
-    }
-    pair<int,int> dec(int a,int b) {
-        assert(isanc(a,b));
-        int v = 1e9;
-        int maxn = -1e9;
-        for(int j=B-1; j>=0; j--) {
-            if(!isanc(P[b][j],a)) {
-                if(dv[b][0]>v) return {-1,-1};
-                if(dv[b][j]==-1) return {-1,-1};
-                v = dv[b][j];
-                maxn = max(maxn,mx[b][j]);
-                b = P[b][j];
-            }
-        }
-        maxn = max(maxn,mx[b][0]);
-        if(dv[b][0]>v) return {-1,-1};
-        return {dv[b][0],maxn};
-    }
-    pair<int,int> inc(int a,int b) {
-        assert(isanc(a,b));
-        int v = -1e9;
-        int maxn = -1e9;
-        for(int j=B-1; j>=0; j--) {
-            if(!isanc(P[b][j],a)) {
-                if(iv[b][0]<v) return {-1,-1};
-                if(iv[b][j]==-1) return {-1,-1};
-                v = iv[b][j];
-                maxn = max(maxn,mx[b][j]);
-                b = P[b][j];
-            }
-        }
-        maxn = max(maxn,mx[b][0]);
-        if(iv[b][0]<v)	 return {-1,-1};
-        return {iv[b][0],maxn};
-    }
-    bool query(int a,int d,int t) {
-        if(a==d) return 1;
-        if(isanc(d,a)) {
-            pair<int,int> k = dec(d,a);
-            if(k.first==-1) return 0;
-            if(k.second>t) return 0;
-            return 1;
-        }
-        if(isanc(a,d)) {
-            pair<int,int> k = inc(a,d);
-            if(k.first==-1) return 0;
-            if(k.second>t) return 0;
-            return 1;
-        }
-        int c = lca(a,d);
-        pair<int,int> k1 = inc(c,d);
-        pair<int,int> k2 = dec(c,a);
-        if(k1.first==-1 || k2.first==-1) return 0;
-        if(max(k1.second,k2.second)>t) return 0;
-        return (k1.first>k2.first);
-    }
-};
-
-
-
-int main() {
-    ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-    int n,k;
-    cin>>n>>k;
-    vector<qT> query;
-    for(int i=1; i<=n+k-1; i++) {
-        char t;
-        cin>>t;
-        if(t=='S') {
-            int a,b;
-            cin>>a>>b;
-            side[a].push_back({b,i});
-            side[b].push_back({a,i});
-        }
-        if(t=='Q') {
-            int a,d;
-            cin>>a>>d;
-            query.emplace_back(0,a,d,i);
-        }
-        if(t=='C') {
-            int d;
-            cin>>d;
-            query.emplace_back(1,0,d,i);
-        }
-    }
-    Qstruct Qans;
-    Qans.init(n);
-    for(auto cur : query)	{
-        if(cur.type==0) {
-            if(Qans.query(cur.a,cur.d,cur.t)){
-				cout<<"yes\n";
-			}else{
-				cout<<"no\n";
-			}
-        } else {
-            cout<<0<<"\n";
-        }
-    }
-    return 0;
+const int Z = 1.2e5, B = 17;
+int N, K, p[Z][B], up[Z][2], d[Z], pE[Z], res[Z];
+vector<int> h[Z];
+vector<array<int, 2>> g[Z], q0[Z], q1[Z];
+vector<array<int, 3>> qQ;
+vector<array<int, 4>> pQ;
+ 
+void init(int u) {
+	for(int i = 0; i + 1 < B; ++i) p[u][i+1] = p[p[u][i]][i];
+	for(auto [v, i] : g[u]) if(v != p[u][0]) {
+		p[v][0] = u;
+		d[v] = d[u] + 1;
+		pE[v] = i;
+		if(pE[u] < i) {
+			up[v][0] = up[u][0];
+			up[v][1] = u;
+		} else {
+			up[v][0] = u;
+			up[v][1] = up[u][1];
+		}
+		init(v);
+	}
 }
+ 
+int _u, _v;
+ 
+int lca(int u, int v) {
+	bool swapped = 0;
+	if((swapped = (d[u] < d[v]))) swap(u, v);
+	if(d[u] > d[v]) {
+		for(int i = B; i--; ) if((d[u] - d[v] - 1) & (1<<i)) u = p[u][i];
+		if(p[u][0] == v) {
+			_u = u;
+			return v;
+		}
+		u = p[u][0];
+	}
+	for(int i = B; i--; ) if(p[u][i] != p[v][i]) u = p[u][i], v = p[v][i];
+	if(swapped) swap(u, v);
+	_u = u, _v = v;
+	return p[u][0];
+}
+int F[2*Z];
+void add(int i, int v) {
+	for(++i; i < N + K; i += i&-i) F[i] += v;
+}
+ 
+int get(int i) {
+	int v {};
+	for(++i; i; i -= i&-i) v += F[i];
+	return v;
+}
+ 
+void dfs(int u) {
+	add(pE[u], 1);
+	for(auto [j, i] : q1[u]) res[j] -= get(i);
+	for(auto [v, i] : g[u]) if(v != p[u][0]) dfs(v);
+	for(auto [j, i] : q0[u]) res[j] += get(i);
+	for(int v : h[u]) add(pE[v], -1);
+}
+ 
+int main() {
+	cin >> N >> K;
+	// cin
+	for(int i {}, j {}; i < N - 1 + K; ++i) {
+		char t; int u, v;
+		cin >> t >> u; --u;
+		if(t == 'S') {
+			cin >> v; --v;
+			g[u].push_back({v, i});
+			g[v].push_back({u, i});
+		}
+		if(t == 'Q') {
+			cin >> v; --v;
+			pQ.push_back({j++, i, u, v});
+		}
+        if(t == 'C') qQ.push_back({j++, i, u});
+	}
 
+	// sort by reverse time?
+	for(int u = N; u--; ) reverse(begin(g[u]), end(g[u]));
+
+	init(0);
+	for(auto [j, i, u] : qQ) {
+		q0[u].push_back({j, i});
+		q1[up[u][1]].push_back({j, i});
+	}
+	for(int u = N; u--;) h[up[u][0]].push_back(u);
+	dfs(0);
+	for(auto [j, i, u, v] : pQ) {
+		int w = lca(u, v), val = w == u ? pE[_u] : pE[u];
+		if(w != u && w != v && pE[_u] < pE[_v]) val = i; 
+		if(u == v || (max(d[up[u][0]], d[up[v][1]]) <= d[w] && val < i)) res[j] = -1;
+		else res[j] = -2;
+	}
+	for(int j = 0; j < K; ++j) {
+		if(res[j] < 0) cout << (res[j] & 1 ? "yes\n" : "no\n");
+		else cout << 1 + res[j] << '\n';
+	}
+}
