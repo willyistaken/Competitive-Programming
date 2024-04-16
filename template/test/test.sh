@@ -1,8 +1,13 @@
 #!/usr/bin/zsh
-for i in {1..100}; 
+for ((i=0;;i++))
 do
 ./gen > case.in
-./A < case.in > result
-./B < case.in >> result
-./Comp < case.in < result >> dif
+./A < case.in > aout
+./B < case.in > bout
+
+if ! (cmp -s aout bout);
+then
+cat case.in
+fi
+
 done

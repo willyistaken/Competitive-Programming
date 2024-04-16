@@ -12,6 +12,10 @@ it can be turn into count the number of way to 2-color a graph
 the answer seems to be 2^x ??? why
 */
 
+
+
+// the below code is wrong
+
 struct BIT{
 	vector<int> arr;
 	int _n;
@@ -96,6 +100,13 @@ int main() {
             }
 			cnt[color[p]-1].modify(p,-1);
 		}
+		cout<<i<<","<<p<<":\n";
+		for(auto k : noc) cout<<k<<" ";
+		cout<<"\n";
+		for(int k=0;k<2;k++){
+			for(int j=1;j<=n;j++) cout<<cnt[k].query(j)-cnt[k].query(j-1);
+			cout<<"\n";
+		}
     }
 	ll ans = 1;
 	for(int i=0;i<cc;i++){
@@ -104,4 +115,3 @@ int main() {
 	cout<<ans<<"\n";
     return 0;
 }
-

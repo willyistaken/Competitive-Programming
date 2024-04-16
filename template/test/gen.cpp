@@ -9,29 +9,18 @@ typedef long long ll;
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	mt19937 rng(time(0));
-	int n = 20;
-	int q = 10;
-	cout<<n<<" "<<q<<"\n";
-	for(int i=0;i<n;i++){
-		cout<<rng()%100+1<<" ";
+	mt19937 r(random_device{}());
+	int n = 5;
+	vector<int> arr(2*n);
+	srand(r());
+	for(int i=0;i<2*n;i++) arr[i]=i+1;
+	cout<<n<<"\n";
+	random_shuffle(arr.begin(),arr.end());
+	for(int i=0;i<2*n;i+=2){
+		if(arr[i]>arr[i+1]) swap(arr[i],arr[i+1]);
+		cout<<arr[i]<<" "<<arr[i+1]<<"\n";
 	}
-	cout<<'\n';
-	for(int i=0;i<q;i++){
-		int t = !(i&1);
-		if(t){
-			int l = rng()%n+1;
-			int r = rng()%n+1;
-			if(r<l) swap(l,r);
-			cout<<t<<" "<<l<<" "<<r<<"\n";
-		}else{
-			int l = rng()%n+1;
-			int r = rng()%n+1;
-			if(r<l) swap(l,r);
-			int c = rng()%100+1;
-			cout<<t<<" "<<l<<" "<<r<<' '<<c<<"\n";
-		}
-	}
+
 
 	return 0;
 }

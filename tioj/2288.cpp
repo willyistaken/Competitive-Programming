@@ -3,154 +3,145 @@ using namespace std;
 typedef long long ll;
 //#include<bits/extc++.h>
 //__gnu_pbds
-const int N = 150005;
-const ll inf=1e16;
+
 
 struct DSU{
-	vector<int> P,sz;
-	void reset(int n){
-		P.resize(n);
-		for(int i=0;i<n;i++) P[i]=i;
-		sz.resize(n);
-		for(int i=0;i<n;i++) sz[i]=1;
+	vector<int> p;
+	DSU(int _n=-1){
+		p.resize(_n+1);
+		for(int i=1;i<=_n;i++) p[i]=i;
 	}
-	DSU(int n){
-		reset(n);
+	int query(int a){
+		assert(a<p.size());
+		if(p[a]==a) return a;
+		p[a] = query(p[a]);
+		return p[a];
 	}
-	int find(int a){
-		if(P[a]==a) return a;
-		P[a] = find(P[a]);
-		return P[a];
-	}
-	bool join(int a,int b){
-		a = find(a);
-		b = find(b);
-		if(sz[a]>sz[b])	swap(a,b);
-		if(a!=b){
-			P[a]=b;
-			sz[b]+=sz[a];
-			return 1;
-		}
-		return 0;
-	}
-		
-};
-
-struct DMST{
-	struct edge{
-		int l,r;
-		int u,v;
-		ll w;
-		edge(int _l,int _r,int _u,int _v,ll _w):l(_l),r(_r),u(_u),v(_v),w(_w){}
-		bool operator<(edge &b){
-			return w<b.w;
-		}
-	};
-	vector<edge> Eran;
-	vector<tuple<int,int,ll> > edgeset;
-	vector<int> prev;
-	vector<int> id;
-	DSU dsu1,dsu2;
-	int realn;
-	DMST(vector<tuple<int,int,ll> > Es , int n):edgeset(Es),prev(Es.size()),id(n),dsu1(n),dsu2(n),realn(n){}
-	int q= 0;
-	void update(int i,ll x){
-		q++;
-		int u = get<0>(edgeset[i]);
-		int v = get<1>(edgeset[i]);
-		ll w = get<2>(edgeset[i]);
-		Eran.push_back(edge(prev[i],q,u,v,w));
-		prev[i]=q;
-		get<2>(edgeset[i])=x;
-	}
-	vector<ll> ans;
-	void solve(int l,int r,vector<edge> es,int n,ll cost){
-		es.erase(stable_partition(es.begin(),es.end(),[&](const edge& e) {return !(e.r<=l or r<=e.l);}),es.end());	
-		dsu1.reset(n);dsu2.reset(n);
-		for(auto &e :es){
-			if(l<e.l || r>e.r){
-				dsu1.join(e.u,e.v);
-			}
-		}
-		for(auto &e:es){
-			if(e.l<=l && e.r>=r){
-				if(dsu1.join(e.u,e.v)){
-					cost+=e.w;
-					dsu2.join(e.u,e.v);
-				}
-			}
-		}
-		if(r-l==1){
-			ans[l]=cost;
-			return;
-		}
-		int cnt=0;
-		for(int i=0;i<n;i++) if(dsu2.find(i)==i) id[i]=cnt++;
-		dsu1.reset(cnt);
-		for(auto &e :es){
-			e.u = id[dsu2.find(e.u)];e.v=id[dsu2.find(e.v)];
-			if(e.l<=l && e.r>=r){
-				if(!dsu1.join(e.u,e.v)){
-					e.l=1e9;
-					e.r=-1e9;
-				}
-			}
-		}
-		int m = (l+r)/2;
-		solve(l,m,es,cnt,cost);
-		solve(m,r,es,cnt,cost);
-	}
-	vector<ll> run(){
-		int m = edgeset.size();
-		q++;
-		for(int i=0;i<m;i++){
-			int u = get<0>(edgeset[i]);
-			int v = get<1>(edgeset[i]);
-			ll w = get<2>(edgeset[i]);
-			int l = prev[i];
-			Eran.push_back(edge(l,q,u,v,w));
-		}
-		sort(Eran.begin(),Eran.end());
-		ans.resize(q);
-		solve(0,q,Eran,realn,0);
-		return ans;
+	void join(int a,int b){
+		a = query(a);b = query(b);
+		p[b]=a;
+		return;
 	}
 };
+const int N = 150005;
+vector<int> side[N];
+ll ans[N];
+vector<bool> taken;
+const int B = 20;
+int P[N][B];
+pair<int,int> dfn[N];
+int T;
+
+void dfs(int cur,int p){
+	P[cur][0]=p;
+	dfn[cur].first=++T;
+	for(int i=0;i<side[cur].size();i++){
+		if(side[cur][i]!=p){
+			dfs(side[cur][i],cur);
+		}
+	}
+	dfn[cur].second=++T;
+}
+
+bool isanc(int a,int b){
+	return (dfn[a].first<=dfn[b].first && dfn[a].second>=dfn[b].second);
+}
+
+int lca(int a,int b){
+	if(isanc(a,b)) return a;
+	if(isanc(b,a)) return b;
+	for(int j=B-1;j>=0;j--){
+		if(!isanc(P[b][j],a)) b = P[b][j];
+	}
+	return P[b][0];
+}
+DSU top(N);
+vector<DSU> vset(1);
+void goup(int a,int b,int w){
+	assert(isanc(b,a));
+	a = top.query(a);
+	while(!isanc(P[a][0],b)){
+		int v = P[a][0];
+		int c =  lower_bound(side[v].begin(),side[v].end(),a)-side[v].begin()+1;
+		int r = lower_bound(side[v].begin(),side[v].end(),P[v][0])-side[v].begin()+1;
+		if(vset[v].query(r)!=vset[v].query(c)){
+			ans[v]+=w;
+			vset[v].join(r,c);
+		}
+		top.join(P[a][0],a);
+		a = top.query(a);
+	}
+}
 
 
-int main() {
-    ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int n,m;
-    cin>>n>>m;
-	vector<tuple<int,int,ll> > ogE(m);	
-	vector<vector<int> > side(n);
+int main(){
+	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	int n,m;cin>>n>>m;	
+	taken.resize(m,0);
+	vector<tuple<int,int,int> > eset;			
 	for(int i=0;i<m;i++){
-		int a,b;ll w;cin>>a>>b>>w;
-		a--;b--;
-		ogE[i] = {a,b,w};
-		side[a].push_back(i);
-		side[b].push_back(i);
+		int u,v,w;cin>>u>>v>>w;
+		eset.emplace_back(u,v,w);
 	}
-
-	DMST dmst(ogE,n);
-	vector<int> anstime(n);
-	int qt=0;
-	for(int i=0;i<n;i++){
-		for(auto k : side[i]){
-			dmst.update(k,inf);
-			qt++;
+	sort(eset.begin(),eset.end(),[](tuple<int,int,int> &a,tuple<int,int,int> &b){return get<2>(a)<get<2>(b);});
+	DSU all(n);
+	ll W = 0;
+	int temp = 0;
+	for(auto &[u,v,we] : eset){
+		if(all.query(u)!=all.query(v)){
+			W+=we;
+			all.join(u,v);
+			taken[temp]=1;
+			side[u].push_back(v);
+			side[v].push_back(u);
+			ans[u]-=we;
+			ans[v]-=we;
 		}
-		anstime[i]=qt;
-		for(auto k : side[i]){
-			dmst.update(k,get<2>(ogE[k]));
-			qt++;
+		temp++;
+	}
+	for(int i=1;i<=n;i++) ans[i]+=W;
+	
+	for(int i=1;i<=n;i++){
+		vset.emplace_back(side[i].size());
+		sort(side[i].begin(),side[i].end());
+	}
+	dfs(1,1);
+	for(int j=1;j<B;j++){
+		for(int i=1;i<=n;i++){
+			P[i][j] = P[P[i][j-1]][j-1];
 		}
 	}
-	vector<ll> ans = dmst.run();
-	for(auto i : anstime){
-		if(ans[i]>=2e16) cout<<-1<<" ";
-		else cout<<ans[i]-(ll)(1e16)<<" ";
+	for(int i=0;i<m;i++){
+		if(taken[i]) continue;
+		auto &[u,v,w] = eset[i];
+		if(isanc(u,v)){
+			goup(v,u,w);
+		}else if(isanc(v,u)){
+			goup(u,v,w);
+		}else{
+			int c = lca(u,v);
+			goup(u,c,w);
+			goup(v,c,w);
+			for(int j=B-1;j>=0;j--){
+				if(!isanc(P[u][j],c)) u = P[u][j];
+				if(!isanc(P[v][j],c)) v = P[v][j];
+			}
+			int a = lower_bound(side[c].begin(),side[c].end(),u)-side[c].begin()+1;
+			int b = lower_bound(side[c].begin(),side[c].end(),v)-side[c].begin()+1;
+			if(vset[c].query(a)!=vset[c].query(b)){
+				vset[c].join(a,b);
+				ans[c]+=w;
+			}
+		}
+	}
+	for(int i=1;i<=n;i++){
+		bool k = 1;
+		for(int j=1;j<side[i].size();j++){
+			k&=(vset[i].query(j)==vset[i].query(j+1));
+		}
+		if(!k) cout<<-1<<" ";
+		else  cout<<ans[i]<<" ";
 	}
 	cout<<"\n";
-    return 0;
+	return 0;
 }

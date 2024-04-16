@@ -9,16 +9,17 @@ typedef long long ll;
 
 int main(){
 	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-	int a = 1;
-	int b = 2;
-	int mod;cin>>mod;
-	for(int i=0;i<100;i++){
-		int c = (2*b+a)%mod;	
-		a = b;
-		b = c;
-		cout<<b<<" ";
+	int t=1000;
+	cout<<t-2<<"\n";
+	random_device g;
+	mt19937 r(g());
+	for(int n=3;n<=t;n++){
+	cout<<n<<"\n";
+	for(int i=0;i<n;i++){
+		cout<<1<<" ";
 	}
 	cout<<"\n";
+	}
 
 	return 0;
 }
