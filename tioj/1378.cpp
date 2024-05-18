@@ -9,8 +9,8 @@ int main() {
     string s;
     getline(cin, s);
     stack<char> later;
-    for (auto i : s) {
-        if (i == '(') {
+	for (auto i : s) {
+		if (i == '(') {
             later.push(i);
         }else if (i == ')') {
             while (later.top() != '(') {
@@ -39,6 +39,8 @@ int main() {
     }
     cout<<"\n";
     return 0;
+	
 }
 
 // http://sptutor.dyu.edu.tw/DSTutor/exprDemo.jsp
+

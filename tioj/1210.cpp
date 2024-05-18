@@ -2,12 +2,11 @@
 using namespace std;//havel theorem
 int n;
 int arr[10000];
-bool pass()
-{
-    for(int i=0;i<n;i++)
+bool pass() {
+    for(int i=0; i<n; i++)
     {
         sort(arr+i,arr+n,greater<int>());
-        for(int j=i+1;j<n&&arr[i]>0;j++)
+        for(int j=i+1; j<n&&arr[i]>0; j++)
         {
             arr[i]--;
             arr[j]--;
@@ -17,12 +16,9 @@ bool pass()
     }
     return true;
 }
-int main()
-{
-    
-    while(cin>>n,n)
-    {
-        for(int i=0;i<n;i++)
+int main() {
+    while(cin>>n,n) {
+        for(int i=0; i<n; i++)
             cin>>arr[i];
         if(pass())
             cout<<"Yes"<<endl;
