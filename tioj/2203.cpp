@@ -11,6 +11,8 @@ ll MA(const ll a,const ll b){
 ll MM(const ll a,const ll b){
 	return (a*b)%MOD;
 }
+
+
 struct node{
 	ll m=0;
 	ll v=0;

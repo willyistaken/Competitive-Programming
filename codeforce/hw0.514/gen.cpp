@@ -9,10 +9,10 @@ int main(){
 	ios_base::sync_with_stdio(0);cin.tie(0);
 	random_device rd;
 	mt19937 gen(rd());
-	int n = gen()%10+1;
+	int n = 8;
 	cout<<n<<"\n";
 	for(int i=0;i<n;i++){
-		cout<<gen()%100<<" ";
+		cout<<((gen()%2)?"B ":"R ")<<gen()%10000001<<" "<<gen()%10000001<<"\n";
 	}
 	cout<<"\n";
 
